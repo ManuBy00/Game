@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.proyectgame.Controller.LoginController">
+    <children>
+        <VBox alignment="CENTER" spacing="15.0" layoutX="100.0" layoutY="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <padding>
+                <Insets top="40" right="60" bottom="40" left="60"/>
+            </padding>
+
+            <Label text="Iniciar Sesión">
+                <font>
+                    <Font size="24.0"/>
+                </font>
+            </Label>
+
+            <TextField fx:id="emailField" promptText="Correo electrónico"/>
+            <PasswordField fx:id="passwordField" promptText="Contraseña"/>
+
+            <Button text="Iniciar sesión" onAction="#EjecutarLogin"/>
+
+            <Label fx:id="errorLabel" textFill="RED" visible="false"/>
+        </VBox>
+    </children>
+</AnchorPane>

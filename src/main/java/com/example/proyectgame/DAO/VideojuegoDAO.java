@@ -1,0 +1,141 @@
+package com.example.proyectgame.DAO;
+
+import com.example.proyectgame.DataBase.ConnectionBD;
+import com.example.proyectgame.Model.RolUsuario;
+import com.example.proyectgame.Model.Usuario;
+import com.example.proyectgame.Model.Videojuego;
+
+import java.sql.*;
+
+public class VideojuegoDAO implements DAOinterface<Videojuego> {
+
+    private final static String SQL_INSERT = "INSERT INTO videojuego (titulo, descripcion, desarrolladora, genero, fechalanzamiento) VALUES (?, ?, ?, ?, ?)";
+    private final static String SQL_DELETE_BY_NAME =  "DELETE FROM videojuego WHERE titulo = ?";
+    private final static String SQL_UPDATE = "UPDATE videojuego SET titulo = ?, descripcion = ?, desarrolladora = ?, genero = ?, fechalanzamiento = ? WHERE id = ?";
+    private final static String SQL_FIND_BY_NAME = "SELECT * FROM videojuego WHERE titulo = ?";
+    private final static String SQL_FIND_BY_ID = "SELECT * FROM videojuego WHERE id = ?";
+    private final static String SQL_DELETE_BY_ID = "DELETE FROM videojuego WHERE id = ?";
+
+
+    public  boolean insert(Videojuego videojuego) {
+        boolean added = false;
+        if (videojuego != null && findByName(videojuego.getTitulo())==null) {
+            try {
+                Connection con = ConnectionBD.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, videojuego.getTitulo());
+                ps.setString(2, videojuego.getDescripcion());
+                ps.setString(3, videojuego.getDesarrolladora());
+                ps.setString(4, videojuego.getGenero());
+                ps.setDate(5, Date.valueOf(videojuego.getFechalanzamiento()));
+                int filas = ps.executeUpdate();
+                if (filas > 0) {
+                    added = true;
+                    // Recuperar el ID generado por la base de datos
+                    ResultSet rs = ps.getGeneratedKeys();
+                    if (rs.next()) {
+                        videojuego.setId(rs.getInt(1)); // Asignamos el ID al objeto
+                    }
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return added;
+    }
+
+    public boolean delete(int id) {
+        boolean deleted = false;
+        if (findById(id)!=null) {
+            try {
+                Connection con = ConnectionBD.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_DELETE_BY_ID);
+                ps.setInt(1, id);
+                int filas = ps.executeUpdate();
+
+                if (filas > 0) {
+                    deleted = true;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return deleted;
+    }
+
+    public Videojuego findByName(String titulo) {
+        Videojuego videojuego = null;
+        try {
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_FIND_BY_NAME);
+            ps.setString(1, titulo);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                videojuego = new Videojuego();
+                videojuego.setTitulo(rs.getString("titulo"));
+                videojuego.setDescripcion(rs.getString("descripcion"));
+                videojuego.setDesarrolladora("desarrolladora");
+                videojuego.setGenero(rs.getString("genero"));
+                videojuego.setFechalanzamiento(rs.getDate("fechaLanzamiento").toLocalDate());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return videojuego;
+    }
+
+    /**
+     * Actualiza los datos de un usuario
+     * @param videojuegoNuevo objeto usuario con los datos nuevos
+     * @param  videojuegoActual usuario que se va cambiar
+     * @return true si se actualiza correctamente
+     */
+    public boolean update(Videojuego videojuegoNuevo, Videojuego videojuegoActual) {
+        boolean updated = false;
+        if (videojuegoNuevo != null && findByName(videojuegoActual.getTitulo())!=null) {
+            try {
+                Connection con = ConnectionBD.getConnection();
+                PreparedStatement ps = con.prepareStatement(SQL_UPDATE);
+                ps.setString(1, videojuegoNuevo.getTitulo());
+                ps.setString(2, videojuegoNuevo.getDescripcion());
+                ps.setString(3, videojuegoNuevo.getDesarrolladora());
+                ps.setString(4, videojuegoNuevo.getGenero());
+                ps.setDate(5, Date.valueOf(videojuegoNuevo.getFechalanzamiento()));
+                ps.setInt(6, videojuegoActual.getId());
+                int filas = ps.executeUpdate();
+
+                if (filas > 0) {
+                    updated = true;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return updated;
+    }
+
+    public Videojuego findById(int id) {
+        Videojuego videojuego = null;
+        try {
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_FIND_BY_ID);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                videojuego = new Videojuego();
+                videojuego.setId(rs.getInt("id"));
+                videojuego.setTitulo(rs.getString("titulo"));
+                videojuego.setDescripcion(rs.getString("descripcion"));
+                videojuego.setDesarrolladora(rs.getString("desarrolladora"));
+                videojuego.setGenero(rs.getString("genero"));
+                videojuego.setFechalanzamiento(rs.getDate("fechalanzamiento").toLocalDate());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return videojuego;
+    }
+}
