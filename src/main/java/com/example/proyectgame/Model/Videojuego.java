@@ -1,6 +1,8 @@
 package com.example.proyectgame.Model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Videojuego {
     private int id;
@@ -9,6 +11,7 @@ public class Videojuego {
     private String desarrolladora;
     private String genero;
     private LocalDate fechalanzamiento;
+    private List<Resena> resenaList;
 
 
     public Videojuego(String titulo, String descripcion, String desarrolladora, String genero, LocalDate fechalanzamiento) {
@@ -17,6 +20,7 @@ public class Videojuego {
         this.descripcion = descripcion;
         this.genero = genero;
         this.fechalanzamiento = fechalanzamiento;
+        this.resenaList = new ArrayList<>();
     }
 
     public Videojuego() {

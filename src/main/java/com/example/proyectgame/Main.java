@@ -14,11 +14,8 @@ public class Main {
         ResenaDAO resenaDAO = new ResenaDAO();
 
 
+        Usuario usuario = new Usuario("ManuBy", "manuel@gmail.com", "12345678", RolUsuario.ADMINISTRADOR);
 
-        if (usuarioDAO.delete(10)) {
-            System.out.println("Usuario insertado");
-        }else {
-            System.out.println("Usuario no insertado");
-        }
+        usuarioDAO.insert(usuario);
     }
 }

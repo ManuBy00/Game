@@ -1,6 +1,7 @@
 package com.example.proyectgame.Model;
 
-import Utilities.Seguridad;
+import com.example.proyectgame.Utilities.Seguridad;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

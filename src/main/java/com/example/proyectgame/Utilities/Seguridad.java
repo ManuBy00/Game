@@ -1,4 +1,4 @@
-package Utilities;
+package com.example.proyectgame.Utilities;
 
 import org.mindrot.jbcrypt.BCrypt;
 

@@ -13,5 +13,4 @@ public enum RolUsuario {
         return etiqueta;
     }
 
-
 }
