@@ -6,20 +6,22 @@ import com.example.proyectgame.Model.Usuario;
 import com.example.proyectgame.Model.Videojuego;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideojuegoDAO implements DAOinterface<Videojuego> {
 
-    private final static String SQL_INSERT = "INSERT INTO videojuego (titulo, descripcion, desarrolladora, genero, fechalanzamiento) VALUES (?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT = "INSERT INTO videojuego (titulo, descripcion, desarrolladora, genero, fechalanzamiento, portada) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE videojuego SET titulo = ?, descripcion = ?, desarrolladora = ?, genero = ?, fechalanzamiento = ?, portada = ? WHERE id = ?";
+    private static final String SQL_FIND_BY_NAME = "SELECT * FROM videojuego WHERE titulo = ?";
+    private static final String SQL_FIND_BY_ID = "SELECT * FROM videojuego WHERE id = ?";
+    private static final String SQL_DELETE_BY_ID = "DELETE FROM videojuego WHERE id = ?";
     private final static String SQL_DELETE_BY_NAME =  "DELETE FROM videojuego WHERE titulo = ?";
-    private final static String SQL_UPDATE = "UPDATE videojuego SET titulo = ?, descripcion = ?, desarrolladora = ?, genero = ?, fechalanzamiento = ? WHERE id = ?";
-    private final static String SQL_FIND_BY_NAME = "SELECT * FROM videojuego WHERE titulo = ?";
-    private final static String SQL_FIND_BY_ID = "SELECT * FROM videojuego WHERE id = ?";
-    private final static String SQL_DELETE_BY_ID = "DELETE FROM videojuego WHERE id = ?";
 
 
-    public  boolean insert(Videojuego videojuego) {
+    public boolean insert(Videojuego videojuego) {
         boolean added = false;
-        if (videojuego != null && findByName(videojuego.getTitulo())==null) {
+        if (videojuego != null && findByName(videojuego.getTitulo()) == null) {
             try {
                 Connection con = ConnectionBD.getConnection();
                 PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -28,16 +30,16 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
                 ps.setString(3, videojuego.getDesarrolladora());
                 ps.setString(4, videojuego.getGenero());
                 ps.setDate(5, Date.valueOf(videojuego.getFechalanzamiento()));
+                ps.setString(6, videojuego.getPortada());
+
                 int filas = ps.executeUpdate();
                 if (filas > 0) {
                     added = true;
-                    // Recuperar el ID generado por la base de datos
                     ResultSet rs = ps.getGeneratedKeys();
                     if (rs.next()) {
-                        videojuego.setId(rs.getInt(1)); // Asignamos el ID al objeto
+                        videojuego.setId(rs.getInt(1));
                     }
                 }
-
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -74,11 +76,13 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
 
             if (rs.next()) {
                 videojuego = new Videojuego();
+                videojuego.setId(rs.getInt("id"));
                 videojuego.setTitulo(rs.getString("titulo"));
                 videojuego.setDescripcion(rs.getString("descripcion"));
-                videojuego.setDesarrolladora("desarrolladora");
+                videojuego.setDesarrolladora(rs.getString("desarrolladora"));
                 videojuego.setGenero(rs.getString("genero"));
-                videojuego.setFechalanzamiento(rs.getDate("fechaLanzamiento").toLocalDate());
+                videojuego.setFechalanzamiento(rs.getDate("fechalanzamiento").toLocalDate());
+                videojuego.setPortada(rs.getString("portada"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -94,7 +98,7 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
      */
     public boolean update(Videojuego videojuegoNuevo, Videojuego videojuegoActual) {
         boolean updated = false;
-        if (videojuegoNuevo != null && findByName(videojuegoActual.getTitulo())!=null) {
+        if (videojuegoNuevo != null && findByName(videojuegoActual.getTitulo()) != null) {
             try {
                 Connection con = ConnectionBD.getConnection();
                 PreparedStatement ps = con.prepareStatement(SQL_UPDATE);
@@ -103,9 +107,10 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
                 ps.setString(3, videojuegoNuevo.getDesarrolladora());
                 ps.setString(4, videojuegoNuevo.getGenero());
                 ps.setDate(5, Date.valueOf(videojuegoNuevo.getFechalanzamiento()));
-                ps.setInt(6, videojuegoActual.getId());
-                int filas = ps.executeUpdate();
+                ps.setString(6, videojuegoNuevo.getPortada());
+                ps.setInt(7, videojuegoActual.getId());
 
+                int filas = ps.executeUpdate();
                 if (filas > 0) {
                     updated = true;
                 }
@@ -132,10 +137,36 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
                 videojuego.setDesarrolladora(rs.getString("desarrolladora"));
                 videojuego.setGenero(rs.getString("genero"));
                 videojuego.setFechalanzamiento(rs.getDate("fechalanzamiento").toLocalDate());
+                videojuego.setPortada(rs.getString("portada"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return videojuego;
+    }
+
+    public List<Videojuego> findAll() {
+        List<Videojuego> lista = new ArrayList<>();
+        try {
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM videojuego");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Videojuego videojuego = new Videojuego();
+                videojuego.setId(rs.getInt("id"));
+                videojuego.setTitulo(rs.getString("titulo"));
+                videojuego.setDescripcion(rs.getString("descripcion"));
+                videojuego.setDesarrolladora(rs.getString("desarrolladora"));
+                videojuego.setGenero(rs.getString("genero"));
+                videojuego.setFechalanzamiento(rs.getDate("fechalanzamiento").toLocalDate());
+                videojuego.setPortada(rs.getString("portada"));
+                lista.add(videojuego);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return lista;
     }
 }

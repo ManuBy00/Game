@@ -1,5 +1,6 @@
 package com.example.proyectgame.Model;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +12,40 @@ public class Videojuego {
     private String desarrolladora;
     private String genero;
     private LocalDate fechalanzamiento;
+    private String portada;
     private List<Resena> resenaList;
 
 
-    public Videojuego(String titulo, String descripcion, String desarrolladora, String genero, LocalDate fechalanzamiento) {
+    public Videojuego(String titulo, String descripcion, String desarrolladora, String genero, LocalDate fechalanzamiento, String portada) {
         this.titulo = titulo;
         this.desarrolladora = desarrolladora;
         this.descripcion = descripcion;
         this.genero = genero;
+        this.portada = portada; //nombre del jpg
         this.fechalanzamiento = fechalanzamiento;
         this.resenaList = new ArrayList<>();
+    }
+
+
+
+    public String getPortadaUrl() {
+        return "/com/example/proyectgame/Portadas/" + portada;
+    }
+
+    public String getPortada() {
+        return portada;
+    }
+
+    public void setPortada(String portada) {
+        this.portada = portada;
+    }
+
+    public List<Resena> getResenaList() {
+        return resenaList;
+    }
+
+    public void setResenaList(List<Resena> resenaList) {
+        this.resenaList = resenaList;
     }
 
     public Videojuego() {
@@ -33,7 +58,6 @@ public class Videojuego {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public LocalDate getFechalanzamiento() {
         return fechalanzamiento;
