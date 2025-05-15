@@ -19,7 +19,7 @@ public class Main {
 
         //Usuario usuario = new Usuario("ManuBy", "manuel@gmail.com", "12345678", RolUsuario.ADMINISTRADOR);
 
-        String titulo = "Prueba8";
+        String titulo = "Prueba16";
         String descripcion = "Videojuego de supervivencia";
         String desarrolladora = "Mojang";
         String genero = "Supervivencia";

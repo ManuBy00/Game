@@ -49,8 +49,8 @@ public class VidejuegosViewController {
         int row = 0;
         int column = 0;
 
-        gridPainVideojuegos.setVgap(30);
-        gridPainVideojuegos.setHgap(20);
+       // gridPainVideojuegos.setVgap(30);
+        // gridPainVideojuegos.setHgap(20);
 
         for (Videojuego videojuego : videojuegos) {
             // Crear el VBox para cada videojuego
@@ -61,7 +61,7 @@ public class VidejuegosViewController {
 
             // Aumenta la columna, y si supera el límite de columnas, resetea la columna y aumenta la fila
             column++;
-            if (column > 2) {  // Asumiendo que el Grid tiene 3 columnas
+            if (column > 2) {
                 column = 0;
                 row++;
             }
@@ -71,7 +71,6 @@ public class VidejuegosViewController {
     private VBox crearCeldaJuego(Videojuego juego) {
         VBox vbox = new VBox(5);
         vbox.setAlignment(Pos.CENTER);
-
 
 
         // Carga de la imagen desde recursos
