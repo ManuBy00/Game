@@ -33,31 +33,25 @@
 
             <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
             <content>
-                <GridPane fx:id="gridPainVideojuegos" hgap="20" prefHeight="456.0" prefWidth="765.0" vgap="30">
+                <GridPane fx:id="gridPaneVideojuegos" hgap="20" prefHeight="456.0" prefWidth="765.0" vgap="30">
                  <columnConstraints>
                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                  </columnConstraints>
                  <rowConstraints>
-                   <RowConstraints maxHeight="291.0" minHeight="0.0" prefHeight="179.0" vgrow="SOMETIMES" />
-                   <RowConstraints maxHeight="291.0" minHeight="0.0" prefHeight="151.4" vgrow="SOMETIMES" />
-                   <RowConstraints fillHeight="false" maxHeight="291.0" minHeight="0.0" prefHeight="151.0" vgrow="SOMETIMES" />
                  </rowConstraints>
                   <opaqueInsets>
                      <Insets />
                   </opaqueInsets>
-                  <padding>
-                     <Insets top="40.0" />
-                  </padding>
                </GridPane>
             </content></ScrollPane>
 
-            <HBox alignment="CENTER" prefHeight="63.0" prefWidth="600.0" spacing="10">
+            <HBox alignment="CENTER" prefHeight="26.0" prefWidth="779.0" spacing="10">
                 <children>
                     <Button fx:id="addButton" onAction="#addVideojuego" text="Añadir" />
-                    <Button fx:id="updateButton" text="Editar" />
-                    <Button fx:id="deleteButton" text="Borrar" />
+                    <Button fx:id="updateButton" onAction="#updateVideojuego" text="Editar" />
+                    <Button fx:id="deleteButton" onAction="#deleteVideojuego" text="Borrar" />
                 </children>
             </HBox>
         </VBox>

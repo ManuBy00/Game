@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.proyectgame.Controller.FormVideojuegoController">
+    <children>
+        <VBox spacing="10.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20" />
+            </padding>
+            <children>
+                <Label text="Título"/>
+                <TextField fx:id="tituloField"/>
+
+                <Label text="Descripción"/>
+                <TextArea fx:id="descripcionArea" prefRowCount="3"/>
+
+                <Label text="Género"/>
+                <TextField fx:id="generoField"/>
+
+                <Label text="Fecha de lanzamiento"/>
+                <DatePicker fx:id="fechaPicker"/>
+
+                <Label text="Desarrollador"/>
+                <TextField fx:id="desarrolladorField"/>
+
+                <Label text="Nombre de la portada"/>
+                <TextField fx:id="portadaField"/>
+
+                <Button fx:id="guardarButton" text="Guardar" maxWidth="Infinity"/>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

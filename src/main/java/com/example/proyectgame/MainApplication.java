@@ -10,7 +10,6 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Cargar el FXML correctamente desde resources
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/LoginView.fxml"));
 
         Parent root = loader.load();

@@ -6,14 +6,19 @@ import com.example.proyectgame.Model.Usuario;
 import com.example.proyectgame.Model.Videojuego;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class VidejuegosViewController {
@@ -25,11 +30,13 @@ public class VidejuegosViewController {
     @FXML
     private Button deleteButton;
     @FXML
-    private GridPane gridPainVideojuegos;
-
+    private GridPane gridPaneVideojuegos;
+    @FXML
+    private VBox celdaSeleccionada; // Guarda la VBox actualmente seleccionada
+    @FXML
+    private Videojuego videojuegoSeleccionado; // Guarda el videojuego correspondiente
     @FXML
     public void initialize() {
-        // Llamamos al método cargarVideojuegos al inicializar el controlador
         cargarVideojuegos();
     }
 
@@ -49,15 +56,12 @@ public class VidejuegosViewController {
         int row = 0;
         int column = 0;
 
-       // gridPainVideojuegos.setVgap(30);
-        // gridPainVideojuegos.setHgap(20);
-
         for (Videojuego videojuego : videojuegos) {
             // Crear el VBox para cada videojuego
             VBox vbox = crearCeldaJuego(videojuego);
 
             // Añadir el VBox al GridPane
-            gridPainVideojuegos.add(vbox, column, row);
+            gridPaneVideojuegos.add(vbox, column, row);
 
             // Aumenta la columna, y si supera el límite de columnas, resetea la columna y aumenta la fila
             column++;
@@ -89,10 +93,73 @@ public class VidejuegosViewController {
         vbox.getChildren().addAll(imageView, nombre, button);
         vbox.setStyle("-fx-border-color: #ccc; -fx-background-color: #f4f4f4; -fx-padding: 0;");
 
+        //Capacidad de seleccionar celdas
+        vbox.setOnMouseClicked(event -> {
+            if (celdaSeleccionada != null) {
+                celdaSeleccionada.setStyle("-fx-border-color: #ccc; -fx-background-color: #f4f4f4; -fx-padding: 10;");
+            }
+
+            celdaSeleccionada = vbox;
+            videojuegoSeleccionado = juego;
+            celdaSeleccionada.setStyle("-fx-border-color: #0078D7; -fx-background-color: #D0E8FF; -fx-padding: 10;");
+        });
+
         return vbox;
     }
 
     public void addVideojuego(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/formVideojuego.fxml"));
+            Parent root = loader.load();
 
+            Stage stage = new Stage();
+            stage.setTitle("Añadir nuevo videojuego");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            // Después de cerrarse, recargar videojuegos en la vista principal
+            cargarVideojuegos();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteVideojuego(ActionEvent actionEvent) {
+        if (videojuegoSeleccionado != null) {
+            VideojuegoDAO dao = new VideojuegoDAO();
+            dao.delete(videojuegoSeleccionado.getId());
+            videojuegoSeleccionado = null;
+            celdaSeleccionada = null;
+            gridPaneVideojuegos.getChildren().clear(); //limpiar grid
+            cargarVideojuegos();
+        } else {
+            System.out.println("No hay ningún videojuego seleccionado.");
+        }
+    }
+
+    public void updateVideojuego(ActionEvent actionEvent) {
+        if (videojuegoSeleccionado != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/formVideojuego.fxml"));
+            Parent root = null;
+            try {
+                root = loader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Stage stage = new Stage();
+            stage.setTitle("Editar videojuego");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            VideojuegoDAO dao = new VideojuegoDAO();
+
+            gridPaneVideojuegos.getChildren().clear(); //limpiar grid
+            cargarVideojuegos();
+        } else {
+            System.out.println("No hay ningún videojuego seleccionado.");
+        }
     }
 }
