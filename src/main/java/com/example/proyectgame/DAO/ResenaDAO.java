@@ -2,14 +2,19 @@ package com.example.proyectgame.DAO;
 
 import com.example.proyectgame.DataBase.ConnectionBD;
 import com.example.proyectgame.Model.Resena;
+import com.example.proyectgame.Model.Usuario;
+import com.example.proyectgame.Model.Videojuego;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResenaDAO implements DAOinterface <Resena>{
     private final static String SQL_INSERT = "INSERT INTO resena (comentario, puntuacion, usuarioid, videojuegoid) VALUES (?, ?, ?, ?)";
     private final static String SQL_DELETE_BY_ID = "DELETE FROM resena WHERE id = ?";
     private final static String SQL_UPDATE = "UPDATE resena SET comentario = ?, puntuacion = ?, usuarioid = ?, videojuegoid = ? WHERE id = ?";
     private final static String SQL_FIND_BY_ID = "SELECT * FROM resena WHERE id = ?";
+    private final static String SQL_FIND_BY_VIDEOJUEGO = "SELECT * FROM resena WHERE videojuegoid = ?";
 
     public  boolean insert(Resena resena) {
         boolean added = false;
@@ -29,7 +34,6 @@ public class ResenaDAO implements DAOinterface <Resena>{
                     }
                     added = true;
                 }
-
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -120,5 +124,33 @@ public class ResenaDAO implements DAOinterface <Resena>{
             throw new RuntimeException(e);
         }
         return resena;
+    }
+
+    public List<Resena> findResenasByVideojuego(Videojuego videojuego) {
+        List<Resena> resenas = new ArrayList<>();
+
+        try (Connection conn = ConnectionBD.getConnection()) {
+            String sql = SQL_FIND_BY_VIDEOJUEGO;
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, videojuego.getId());
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UsuarioDAO usuarioDAO = new UsuarioDAO();
+                Usuario usuario = usuarioDAO.findById(rs.getInt("Usuarioid"));
+                Resena resena = new Resena(
+                        rs.getString("comentario"),
+                        rs.getInt("puntuacion"),
+                        videojuego,
+                        usuario
+                );
+                resena.setId(rs.getInt("id"));
+                resena.setFechaPublicacion(rs.getDate("fecha").toLocalDate());
+                resenas.add(resena);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resenas;
     }
 }

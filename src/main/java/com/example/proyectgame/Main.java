@@ -17,9 +17,10 @@ public class Main {
         ResenaDAO resenaDAO = new ResenaDAO();
 
 
-        //Usuario usuario = new Usuario("ManuBy", "manuel@gmail.com", "12345678", RolUsuario.ADMINISTRADOR);
+        Usuario usuario = new Usuario("admin", "admin@gmail.com", "12345678", RolUsuario.ADMINISTRADOR);
+        usuarioDAO.insert(usuario);
 
-        String titulo = "Prueba16";
+       /* String titulo = "Prueba16";
         String descripcion = "Videojuego de supervivencia";
         String desarrolladora = "Mojang";
         String genero = "Supervivencia";
@@ -29,6 +30,6 @@ public class Main {
         // Crear el objeto Videojuego usando el constructor completo
         Videojuego juego = new Videojuego(titulo, descripcion, desarrolladora, genero, fechaLanzamiento, portada);
 
-        videojuegoDAO.insert(juego);
+        videojuegoDAO.insert(juego);*/
     }
 }

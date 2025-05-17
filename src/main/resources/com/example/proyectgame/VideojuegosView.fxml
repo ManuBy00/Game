@@ -39,13 +39,13 @@
                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                  </columnConstraints>
-                 <rowConstraints>
-                 </rowConstraints>
+
                   <opaqueInsets>
                      <Insets />
                   </opaqueInsets>
                </GridPane>
-            </content></ScrollPane>
+            </content>
+            </ScrollPane>
 
             <HBox alignment="CENTER" prefHeight="26.0" prefWidth="779.0" spacing="10">
                 <children>

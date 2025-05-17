@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="278.0" prefWidth="638.0" stylesheets="@estilos.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectgame.Controller.DetalleVideojuegoController">
+    <center>
+        <HBox fx:id="mainHBox" spacing="20">
+            <!-- Panel izquierdo: Portada y detalles -->
+            <VBox fx:id="leftVBox" prefHeight="650.0" prefWidth="226.0" spacing="10">
+                <padding><Insets bottom="20" left="20" right="10" top="20" /></padding>
+
+                <ImageView fx:id="portadaImageView" fitHeight="263.0" fitWidth="194.0" preserveRatio="true" />
+                <Label fx:id="tituloLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                <Label fx:id="generoLabel" />
+                <Label fx:id="desarrolladorLabel" />
+                <Label fx:id="fechaLabel" />
+                <Label fx:id="descripcionLabel" wrapText="true" />
+                <Label fx:id="puntuacionMediaLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            </VBox>
+
+            <!-- Panel derecho: Reseñas -->
+            <VBox fx:id="rightVBox" prefHeight="503.0" prefWidth="394.0" spacing="10">
+                <padding>
+                    <Insets bottom="20" left="10" right="20" top="20" />
+                </padding>
+
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Reseñas de usuarios" />
+                <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="518.0" prefWidth="311.0" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox fx:id="resenasBox" prefHeight="363.0" prefWidth="362.0" spacing="10" />
+                    </content>
+                </ScrollPane>
+                <TextArea fx:id="comentarioResena" prefHeight="39.0" prefWidth="319.0" promptText="Escribe aquí tu opinión sobre este videojuego" />
+                <Slider fx:id="sliderPuntuacion" blockIncrement="1" majorTickUnit="1" max="5" min="1" minorTickCount="0" prefWidth="200" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="3" />
+                <Button fx:id="addResenna" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#addResena" text="Añadir reseña" />
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

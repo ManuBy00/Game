@@ -1,8 +1,6 @@
 package com.example.proyectgame.DAO;
 
 import com.example.proyectgame.DataBase.ConnectionBD;
-import com.example.proyectgame.Model.RolUsuario;
-import com.example.proyectgame.Model.Usuario;
 import com.example.proyectgame.Model.Videojuego;
 
 import java.sql.*;
@@ -152,6 +150,7 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
             PreparedStatement ps = con.prepareStatement("SELECT * FROM videojuego");
             ResultSet rs = ps.executeQuery();
 
+
             while (rs.next()) {
                 Videojuego videojuego = new Videojuego();
                 videojuego.setId(rs.getInt("id"));
@@ -170,3 +169,4 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
         return lista;
     }
 }
+

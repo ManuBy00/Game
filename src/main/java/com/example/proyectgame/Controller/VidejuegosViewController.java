@@ -88,6 +88,7 @@ public class VidejuegosViewController {
 
         // Botón para ver detalles (puedes agregar su lógica más adelante)
         Button button = new Button("Ver detalles");
+        button.setOnAction(event -> verDetalles(juego));
 
         // Agregar imagen, nombre y botón al VBox
         vbox.getChildren().addAll(imageView, nombre, button);
@@ -141,25 +142,42 @@ public class VidejuegosViewController {
 
     public void updateVideojuego(ActionEvent actionEvent) {
         if (videojuegoSeleccionado != null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/formVideojuego.fxml"));
-            Parent root = null;
             try {
-                root = loader.load();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/formVideojuego.fxml"));
+                Parent root = loader.load();
+
+                FormVideojuegoController controller = loader.getController();
+                controller.setVideojuego(videojuegoSeleccionado); // Este método activa el modo edición
+
+                Stage stage = new Stage();
+                stage.setTitle("Editar videojuego");
+                stage.setScene(new Scene(root));
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.showAndWait();
+
+                cargarVideojuegos();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
-            Stage stage = new Stage();
-            stage.setTitle("Editar videojuego");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
+        }
+    }
 
-            VideojuegoDAO dao = new VideojuegoDAO();
+    @FXML
+    private void verDetalles(Videojuego videojuego) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/detallesView.fxml"));
+            Parent root = loader.load();
 
-            gridPaneVideojuegos.getChildren().clear(); //limpiar grid
-            cargarVideojuegos();
-        } else {
-            System.out.println("No hay ningún videojuego seleccionado.");
+            DetalleVideojuegoController controller = loader.getController();
+            controller.setVideojuego(videojuego);
+
+            Stage stage = (Stage) addButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

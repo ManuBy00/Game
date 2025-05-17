@@ -22,7 +22,7 @@
                 <TextField fx:id="generoField"/>
 
                 <Label text="Fecha de lanzamiento"/>
-                <DatePicker fx:id="fechaPicker"/>
+                <DatePicker fx:id="fechaLanzamiento"/>
 
                 <Label text="Desarrollador"/>
                 <TextField fx:id="desarrolladorField"/>

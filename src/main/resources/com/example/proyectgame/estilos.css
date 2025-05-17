@@ -1,0 +1,9 @@
+.slider .thumb {
+    -fx-shape: "M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z";
+    -fx-background-color: gold;
+    -fx-scale-shape: false;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0.0, 0, 1);
+}
