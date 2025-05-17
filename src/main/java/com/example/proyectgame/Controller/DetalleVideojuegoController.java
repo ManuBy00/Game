@@ -7,14 +7,20 @@ import com.example.proyectgame.Model.Videojuego;
 import com.example.proyectgame.Utilities.Sesion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-import java.util.List;
+import java.io.IOException;
+
 
 public class DetalleVideojuegoController {
 
@@ -65,10 +71,11 @@ public class DetalleVideojuegoController {
         // Mostrar reseñas
         resenasBox.getChildren().clear();
         ResenaDAO resenaDAO = new ResenaDAO();
-        List<Resena> resenas = resenaDAO.findResenasByVideojuego(videojuego);
+        videojuego.setResenaList(resenaDAO.findResenasByVideojuego(videojuego));
 
-        if (resenas != null) {
-            for (Resena resena : resenas) {
+
+        if (videojuego.getResenaList() != null) {
+            for (Resena resena : videojuego.getResenaList()) {
                 Label label = new Label("⭐ " + resena.getPuntuacion() + " - " + resena.getComentario());
                 label.setWrapText(true);
                 resenasBox.getChildren().add(label);
@@ -86,9 +93,26 @@ public class DetalleVideojuegoController {
         ResenaDAO dao = new ResenaDAO();
         Resena resena = new Resena(comentarioResena, puntuacion, videojuego, usuario);
         dao.insert(resena);
+        videojuego.getResenaList().add(resena);
 
         this.comentarioResena.clear();
         this.sliderPuntuacion.setValue(3);
         mostrarDetalles(); //para recargar
+    }
+
+    public void volverVentanaAnterior(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/VideojuegosView.fxml"));
+            Parent root = loader.load();
+
+            // Obtener el Stage actual desde el botón que disparó el evento
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

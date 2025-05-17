@@ -26,8 +26,6 @@ public class Videojuego {
         this.resenaList = new ArrayList<>();
     }
 
-
-
     public String getPortadaUrl() {
         return "/com/example/proyectgame/Portadas/" + portada;
     }

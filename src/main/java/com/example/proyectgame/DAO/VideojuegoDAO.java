@@ -163,6 +163,11 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
                 lista.add(videojuego);
             }
 
+            ResenaDAO resenaDAO = new ResenaDAO();
+            for (Videojuego v : lista) {
+                v.setResenaList(resenaDAO.findResenasByVideojuego(v));
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

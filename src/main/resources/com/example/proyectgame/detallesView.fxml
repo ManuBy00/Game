@@ -22,7 +22,7 @@
             </VBox>
 
             <!-- Panel derecho: Reseñas -->
-            <VBox fx:id="rightVBox" prefHeight="503.0" prefWidth="394.0" spacing="10">
+            <VBox fx:id="rightVBox" prefHeight="510.0" prefWidth="394.0" spacing="10">
                 <padding>
                     <Insets bottom="20" left="10" right="20" top="20" />
                 </padding>
@@ -36,6 +36,7 @@
                 <TextArea fx:id="comentarioResena" prefHeight="39.0" prefWidth="319.0" promptText="Escribe aquí tu opinión sobre este videojuego" />
                 <Slider fx:id="sliderPuntuacion" blockIncrement="1" majorTickUnit="1" max="5" min="1" minorTickCount="0" prefWidth="200" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="3" />
                 <Button fx:id="addResenna" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#addResena" text="Añadir reseña" />
+            <Button fx:id="volverButton" alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#volverVentanaAnterior" text="Volver" translateX="300.0" translateY="-35.0" />
             </VBox>
         </HBox>
     </center>
