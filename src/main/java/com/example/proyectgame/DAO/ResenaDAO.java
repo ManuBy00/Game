@@ -1,6 +1,7 @@
 package com.example.proyectgame.DAO;
 
 import com.example.proyectgame.DataBase.ConnectionBD;
+import com.example.proyectgame.Exceptions.ResenaYaExisteException;
 import com.example.proyectgame.Model.Resena;
 import com.example.proyectgame.Model.Usuario;
 import com.example.proyectgame.Model.Videojuego;
@@ -15,9 +16,14 @@ public class ResenaDAO implements DAOinterface <Resena>{
     private final static String SQL_UPDATE = "UPDATE resena SET comentario = ?, puntuacion = ?, usuarioid = ?, videojuegoid = ? WHERE id = ?";
     private final static String SQL_FIND_BY_ID = "SELECT * FROM resena WHERE id = ?";
     private final static String SQL_FIND_BY_VIDEOJUEGO = "SELECT * FROM resena WHERE videojuegoid = ?";
+    private final static String SQL_FIND_RESENA_VIDEOJUEGO_USUARIO = "SELECT COUNT(*) FROM resena WHERE usuarioId = ? AND videojuegoId = ?";
 
     public  boolean insert(Resena resena) {
         boolean added = false;
+        if (existeResena(resena.getUsuario().getId(), resena.getVideojuego().getId())) {
+            throw new ResenaYaExisteException("El usuario ya ha reseñado este videojuego.");
+        }
+
         if (resena != null) {
             try {
                 Connection con = ConnectionBD.getConnection();
@@ -30,7 +36,7 @@ public class ResenaDAO implements DAOinterface <Resena>{
                 if (filas > 0) {
                     ResultSet rs = ps.getGeneratedKeys();
                     if (rs.next()) {
-                        resena.setId(rs.getInt(1)); // Asignar el ID generado a la reseña
+                        resena.setId(rs.getInt(1));
                     }
                     added = true;
                 }
@@ -152,5 +158,28 @@ public class ResenaDAO implements DAOinterface <Resena>{
             e.printStackTrace();
         }
         return resenas;
+    }
+
+    public boolean existeResena(int usuarioId, int videojuegoId) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean existe = false;
+
+        try {
+            con = ConnectionBD.getConnection();
+            String sql = SQL_FIND_RESENA_VIDEOJUEGO_USUARIO;
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, usuarioId);
+            ps.setInt(2, videojuegoId);
+            rs = ps.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                existe = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return existe;
     }
 }

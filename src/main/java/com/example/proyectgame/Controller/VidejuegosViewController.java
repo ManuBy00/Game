@@ -1,6 +1,7 @@
 package com.example.proyectgame.Controller;
 
 import com.example.proyectgame.DAO.VideojuegoDAO;
+import com.example.proyectgame.Model.Genero;
 import com.example.proyectgame.Model.RolUsuario;
 import com.example.proyectgame.Model.Usuario;
 import com.example.proyectgame.Model.Videojuego;
@@ -11,6 +12,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -19,6 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class VidejuegosViewController {
@@ -36,8 +40,74 @@ public class VidejuegosViewController {
     @FXML
     private Videojuego videojuegoSeleccionado; // Guarda el videojuego correspondiente
     @FXML
+    private ComboBox<Genero> comboGenero;
+    @FXML
+    private TextField buscadorNombre;
+
+
+    @FXML
     public void initialize() {
+        comboGenero.getItems().addAll(Genero.values());
+
+        //listener
+        buscadorNombre.textProperty().addListener((observable, oldValue, newValue) -> {
+            aplicarFiltroBusqueda();
+        });
+
         cargarVideojuegos();
+    }
+
+    @FXML
+    private void aplicarFiltroGenero(ActionEvent event) {
+        Genero generoSeleccionado = comboGenero.getValue();
+
+        VideojuegoDAO videojuegoDAO = new VideojuegoDAO();
+        List<Videojuego> videojuegos;
+
+        if (generoSeleccionado == null) {
+            videojuegos = videojuegoDAO.findAll();
+        } else {
+            videojuegos = videojuegoDAO.findByGenero(generoSeleccionado);
+        }
+
+        mostrarVideojuegos(videojuegos);
+    }
+
+    private void aplicarFiltroBusqueda() {
+        String texto = buscadorNombre.getText().toLowerCase();
+        Genero generoSeleccionado = comboGenero.getValue();
+
+        VideojuegoDAO dao = new VideojuegoDAO();
+        List<Videojuego> videojuegos = dao.findAll();
+
+        List<Videojuego> filtrados = videojuegos.stream()
+                .filter(v -> v.getTitulo().toLowerCase().contains(texto))
+                .filter(v -> generoSeleccionado == null || v.getGenero().equals(generoSeleccionado))
+                .toList();
+
+        mostrarVideojuegos(filtrados);
+    }
+
+    /**
+     * Muestra en pantalla los videojuegos resultantes de una lista específica.
+     * @param videojuegos
+     */
+    private void mostrarVideojuegos(List<Videojuego> videojuegos) {
+        gridPaneVideojuegos.getChildren().clear(); // Limpiar anteriores
+
+        int row = 0;
+        int column = 0;
+
+        for (Videojuego videojuego : videojuegos) {
+            VBox vbox = crearCeldaJuego(videojuego);
+            gridPaneVideojuegos.add(vbox, column, row);
+
+            column++;
+            if (column > 2) {
+                column = 0;
+                row++;
+            }
+        }
     }
 
     public void setVisibilidad(Usuario usuarioLogeado) {
@@ -77,9 +147,15 @@ public class VidejuegosViewController {
         vbox.setAlignment(Pos.CENTER);
 
 
-        // Carga de la imagen desde recursos
+        // Carga de la imagen desde recursos. Si no se encuentra la imagen, se pone una por defecto
         String rutaImagen = juego.getPortadaUrl();
-        Image imagen = new Image(getClass().getResourceAsStream(rutaImagen), 120, 160, true, true);
+        InputStream input = getClass().getResourceAsStream(rutaImagen);
+        if (input == null) {
+            input = getClass().getResourceAsStream("/com/example/proyectgame/Portadas/default.png");
+        }
+
+        Image imagen = new Image(input, 120, 160, true, true);
+
         ImageView imageView = new ImageView(imagen);
 
         // Nombre del videojuego
@@ -108,7 +184,7 @@ public class VidejuegosViewController {
         return vbox;
     }
 
-    public void addVideojuego(ActionEvent actionEvent) {
+    public void lanzarFormularioInsert(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/formVideojuego.fxml"));
             Parent root = loader.load();
@@ -140,14 +216,14 @@ public class VidejuegosViewController {
         }
     }
 
-    public void updateVideojuego(ActionEvent actionEvent) {
+    public void lanzarFormularioUpdate(ActionEvent actionEvent) {
         if (videojuegoSeleccionado != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/formVideojuego.fxml"));
                 Parent root = loader.load();
 
                 FormVideojuegoController controller = loader.getController();
-                controller.setVideojuego(videojuegoSeleccionado); // Este método activa el modo edición
+                controller.setVideojuego(videojuegoSeleccionado); // Este metodo activa el modo edición
 
                 Stage stage = new Stage();
                 stage.setTitle("Editar videojuego");
@@ -179,5 +255,10 @@ public class VidejuegosViewController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void limpiarFiltros(ActionEvent actionEvent) {
+        buscadorNombre.clear();
+        cargarVideojuegos();
     }
 }

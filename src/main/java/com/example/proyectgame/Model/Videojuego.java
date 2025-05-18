@@ -10,13 +10,13 @@ public class Videojuego {
     private String titulo;
     private String descripcion;
     private String desarrolladora;
-    private String genero;
+    private Genero genero;
     private LocalDate fechalanzamiento;
     private String portada;
     private List<Resena> resenaList;
 
 
-    public Videojuego(String titulo, String descripcion, String desarrolladora, String genero, LocalDate fechalanzamiento, String portada) {
+    public Videojuego(String titulo, String descripcion, String desarrolladora, Genero genero, LocalDate fechalanzamiento, String portada) {
         this.titulo = titulo;
         this.desarrolladora = desarrolladora;
         this.descripcion = descripcion;
@@ -65,11 +65,11 @@ public class Videojuego {
         this.fechalanzamiento = fechalanzamiento;
     }
 
-    public String getGenero() {
+    public Genero getGenero() {
         return genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(Genero genero) {
         this.genero = genero;
     }
 

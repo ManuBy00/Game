@@ -1,10 +1,12 @@
 package com.example.proyectgame.Controller;
 
 import com.example.proyectgame.DAO.ResenaDAO;
+import com.example.proyectgame.Exceptions.ResenaYaExisteException;
 import com.example.proyectgame.Model.Resena;
 import com.example.proyectgame.Model.Usuario;
 import com.example.proyectgame.Model.Videojuego;
 import com.example.proyectgame.Utilities.Sesion;
+import com.example.proyectgame.Utilities.Utilidades;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +36,6 @@ public class DetalleVideojuegoController {
     @FXML private VBox resenasBox;
     @FXML private TextArea comentarioResena;
     @FXML private Slider sliderPuntuacion;
-
     private Videojuego videojuego;
 
 
@@ -84,7 +85,7 @@ public class DetalleVideojuegoController {
     }
 
     public void addResena(ActionEvent actionEvent) {
-        //añadir excepcion si el usuario ya ha reseñado el videojuego
+
         String comentarioResena = this.comentarioResena.getText();
         int puntuacion = (int) sliderPuntuacion.getValue();
         Videojuego videojuego = this.videojuego;
@@ -92,8 +93,12 @@ public class DetalleVideojuegoController {
 
         ResenaDAO dao = new ResenaDAO();
         Resena resena = new Resena(comentarioResena, puntuacion, videojuego, usuario);
-        dao.insert(resena);
-        videojuego.getResenaList().add(resena);
+        try {
+            dao.insert(resena);
+            videojuego.getResenaList().add(resena);
+        }catch (ResenaYaExisteException e){
+            Utilidades.mostrarAlerta("Error", e.getMessage());
+        }
 
         this.comentarioResena.clear();
         this.sliderPuntuacion.setValue(3);
