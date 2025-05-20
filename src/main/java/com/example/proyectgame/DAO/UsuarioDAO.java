@@ -1,6 +1,7 @@
 package com.example.proyectgame.DAO;
 
 import com.example.proyectgame.DataBase.ConnectionBD;
+import com.example.proyectgame.Exceptions.UsuarioExiste;
 import com.example.proyectgame.Model.RolUsuario;
 import com.example.proyectgame.Model.Usuario;
 import com.example.proyectgame.Utilities.Sesion;
@@ -24,7 +25,9 @@ public class UsuarioDAO implements DAOinterface<Usuario>{
      */
     public boolean insert(Usuario usuario) {
         boolean added = false;
-        if(usuario != null && !findByEmail(usuario.getEmail())){
+        if(findByEmail(usuario.getEmail()) || findByName(usuario.getNombre()) != null) {
+            throw new UsuarioExiste("El nombre o correo introducido ya existe en la base de datos.");
+        }
             try{
                 Connection con = ConnectionBD.getConnection();
                 PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -46,7 +49,6 @@ public class UsuarioDAO implements DAOinterface<Usuario>{
             }catch (SQLException e){
                 throw new RuntimeException(e);
             }
-        }
         return added;
     }
 
@@ -58,7 +60,8 @@ public class UsuarioDAO implements DAOinterface<Usuario>{
     public boolean delete(int id) {
         boolean deleted = false;
         if (findById(id)!=null) {
-            try(PreparedStatement pst= ConnectionBD.getConnection().prepareStatement(SQL_DELETE_BY_ID)){
+            try{
+                PreparedStatement pst= ConnectionBD.getConnection().prepareStatement(SQL_DELETE_BY_ID);
                 pst.setInt(1, id);
                 pst.executeUpdate();
                 deleted = true;
@@ -77,8 +80,8 @@ public class UsuarioDAO implements DAOinterface<Usuario>{
     public boolean update(Usuario usuarioNuevo, Usuario usuarioActual) {
         boolean result = false;
         if((usuarioNuevo!=null)) {
-            try (PreparedStatement pst = ConnectionBD.getConnection().prepareStatement(SQL_UPDATE)) {
-
+            try {
+                PreparedStatement pst = ConnectionBD.getConnection().prepareStatement(SQL_UPDATE);
                 pst.setString(1, usuarioNuevo.getNombre());
                 pst.setString(2, usuarioNuevo.getEmail());
                 pst.setString(3, usuarioNuevo.getContrasena());

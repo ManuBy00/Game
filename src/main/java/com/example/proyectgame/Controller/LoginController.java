@@ -2,6 +2,7 @@ package com.example.proyectgame.Controller;
 
 import com.example.proyectgame.DAO.UsuarioDAO;
 import com.example.proyectgame.Utilities.Sesion;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -78,6 +79,21 @@ public class LoginController {
         } else {
             errorLabel.setText("Credenciales incorrectas");
             errorLabel.setVisible(true);
+        }
+    }
+
+    public void formularioCrearCuenta(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/registro_usuario.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Registro de Usuario");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

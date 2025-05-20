@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="com.example.proyectgame.Controller.LoginController">
+<AnchorPane prefHeight="371.0" prefWidth="272.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectgame.Controller.LoginController">
     <children>
-        <VBox alignment="CENTER" layoutY="60.0" prefHeight="275.0" prefWidth="272.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <VBox alignment="CENTER" layoutY="60.0" prefHeight="275.0" prefWidth="272.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.600000000000023">
             <padding>
                 <Insets bottom="40" left="60" right="60" top="40" />
             </padding>
@@ -24,6 +24,15 @@
             <Button onAction="#EjecutarLogin" text="Iniciar sesión" />
 
             <Label fx:id="errorLabel" textFill="RED" visible="false" />
+         <Label prefHeight="18.0" prefWidth="141.0" text="¿No tienes cuenta? creala">
+            <VBox.margin>
+               <Insets />
+            </VBox.margin></Label>
+         <Hyperlink fx:id="crearCuenta" onAction="#formularioCrearCuenta" prefHeight="23.0" prefWidth="36.0" text="aquí">
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+         </Hyperlink>
         </VBox>
     </children>
 </AnchorPane>

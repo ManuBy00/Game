@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectgame.Controller.ContenidoFormController">
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+
+    <Label text="Título" />
+    <TextField fx:id="tituloField" promptText="Introduce el título" />
+
+    <Label text="Cuerpo" />
+    <TextArea fx:id="cuerpoArea" prefRowCount="5" promptText="Escribe el contenido" />
+
+    <Label text="Fecha de publicación" />
+    <DatePicker fx:id="fechaPicker" />
+
+    <Label text="Tipo de contenido" />
+    <ComboBox fx:id="tipoComboBox">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Noticia" />
+                <String fx:value="Guia" />
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <Label fx:id="campoExtraLabel" prefHeight="18.0" prefWidth="132.0" text="Videojuego relacionado" />
+   <ComboBox fx:id="campoExtraComboBox" prefWidth="150.0">
+      <VBox.margin>
+         <Insets />
+      </VBox.margin></ComboBox>
+    <TextField fx:id="campoExtraField" promptText="" />
+
+    <Button onAction="#guardarContenido" text="Guardar" />
+</VBox>

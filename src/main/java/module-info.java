@@ -11,4 +11,5 @@ module com.example.proyectgame {
     opens com.example.proyectgame.Controller to javafx.fxml;
     exports com.example.proyectgame;
     opens com.example.proyectgame.DataBase to java.xml.bind;
+    exports com.example.proyectgame.Controller;
 }

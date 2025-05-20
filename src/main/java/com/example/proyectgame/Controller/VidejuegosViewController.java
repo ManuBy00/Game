@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -206,6 +207,11 @@ public class VidejuegosViewController {
     public void deleteVideojuego(ActionEvent actionEvent) {
         if (videojuegoSeleccionado != null) {
             VideojuegoDAO dao = new VideojuegoDAO();
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Confirmar borrado");
+            confirm.setHeaderText("¿Seguro que quieres eliminar este videojuego?");
+            confirm.setContentText(videojuegoSeleccionado.getTitulo());
+            confirm.showAndWait();
             dao.delete(videojuegoSeleccionado.getId());
             videojuegoSeleccionado = null;
             celdaSeleccionada = null;
@@ -257,8 +263,26 @@ public class VidejuegosViewController {
         }
     }
 
+    @FXML
     public void limpiarFiltros(ActionEvent actionEvent) {
         buscadorNombre.clear();
         cargarVideojuegos();
+    }
+
+    @FXML
+    public void lanzarVistaContenido(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/ContenidosView.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) updateButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void lanzarVistaUsuario(ActionEvent actionEvent) {
     }
 }

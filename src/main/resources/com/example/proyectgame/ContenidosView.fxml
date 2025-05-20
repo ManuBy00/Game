@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectgame.Controller.ContenidosController">
+    <children>
+      <HBox prefHeight="45.0" prefWidth="600.0" spacing="10.0">
+         <children>
+             <Button fx:id="actualidadButton" mnemonicParsing="false" onAction="#lanzarVistaContenido" text="Actualidad" />
+             <Button fx:id="VideojuegosButton" mnemonicParsing="false" onAction="#lanzarVistaVideojuegos" text="Videojuegos" />
+             <Button fx:id="miUsuarioButton" mnemonicParsing="false" onAction="#lanzarVistaUsuario" text="Mi usuario" />
+         </children>
+         <padding>
+            <Insets left="5.0" top="5.0" />
+         </padding></HBox>
+        <SplitPane dividerPositions="0.30949197860962563" prefHeight="299.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+            <items>
+                <ListView fx:id="contenidosList" onMouseClicked="#mostrarContenidoSeleccionado" prefHeight="200.0" prefWidth="200.0" />
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="tituloLabel" alignment="CENTER" prefHeight="18.0" prefWidth="404.0" text="TITULO" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="subtituloLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="449.0" text="SUBTITULO" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="cuerpoLabel" alignment="TOP_LEFT" prefHeight="206.0" prefWidth="408.0" text="Cuerpo" />
+                  <Label fx:id="autorLabel" prefHeight="18.0" prefWidth="75.0" text="Autor" />
+                  <Label fx:id="fechaLabel" text="Fecha label" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </VBox>
+            </items>
+        </SplitPane>
+        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="600.0" spacing="10.0" VBox.vgrow="NEVER">
+            <children>
+                <Button fx:id="addButton" mnemonicParsing="false" onAction="#lanzarInsertForm" text="Añadir" />
+                <Button fx:id="updateButton" mnemonicParsing="false" onAction="#lanzarUpdateForm" text="Editar" />
+                <Button fx:id="deteleButton" mnemonicParsing="false" onAction="#DeleteContenido" text="Borrar" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

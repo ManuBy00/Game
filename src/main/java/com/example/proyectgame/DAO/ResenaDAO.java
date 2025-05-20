@@ -24,25 +24,24 @@ public class ResenaDAO implements DAOinterface <Resena>{
             throw new ResenaYaExisteException("El usuario ya ha reseñado este videojuego.");
         }
 
-        if (resena != null) {
-            try {
-                Connection con = ConnectionBD.getConnection();
-                PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, resena.getComentario());
-                ps.setInt(2, resena.getPuntuacion());
-                ps.setInt(3, resena.getUsuario().getId());
-                ps.setInt(4, resena.getVideojuego().getId());
-                int filas = ps.executeUpdate();
-                if (filas > 0) {
-                    ResultSet rs = ps.getGeneratedKeys();
-                    if (rs.next()) {
-                        resena.setId(rs.getInt(1));
-                    }
-                    added = true;
+
+        try {
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, resena.getComentario());
+            ps.setInt(2, resena.getPuntuacion());
+            ps.setInt(3, resena.getUsuario().getId());
+            ps.setInt(4, resena.getVideojuego().getId());
+            int filas = ps.executeUpdate();
+            if (filas > 0) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    resena.setId(rs.getInt(1));
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                added = true;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return added;
     }

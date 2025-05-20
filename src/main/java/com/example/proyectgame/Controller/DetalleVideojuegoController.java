@@ -63,7 +63,7 @@ public class DetalleVideojuegoController {
 
         // Mostrar puntuación media
         if (videojuego.getResenaList() != null && !videojuego.getResenaList().isEmpty()) {
-            double media = videojuego.getResenaList().stream().mapToInt(Resena::getPuntuacion).average().orElse(0);
+            double media = videojuego.getResenaList().stream().mapToInt(resena -> resena.getPuntuacion()).average().orElse(0);
             puntuacionMediaLabel.setText("Puntuación media: " + String.format("%.1f", media));
         } else {
             puntuacionMediaLabel.setText("Puntuación media: N/A");

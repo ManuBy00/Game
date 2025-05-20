@@ -1,5 +1,6 @@
 package com.example.proyectgame;
 
+import com.example.proyectgame.DAO.NoticiaDAO;
 import com.example.proyectgame.DAO.ResenaDAO;
 import com.example.proyectgame.DAO.UsuarioDAO;
 import com.example.proyectgame.DAO.VideojuegoDAO;
@@ -18,7 +19,7 @@ public class Main {
 
 
         Usuario usuario = new Usuario("admin", "admin@gmail.com", "12345678", RolUsuario.ADMINISTRADOR);
-        usuarioDAO.insert(usuario);
+
 
        /* String titulo = "Prueba16";
         String descripcion = "Videojuego de supervivencia";
@@ -31,5 +32,8 @@ public class Main {
         Videojuego juego = new Videojuego(titulo, descripcion, desarrolladora, genero, fechaLanzamiento, portada);
 
         videojuegoDAO.insert(juego);*/
+
+        NoticiaDAO noticiaDAO = new NoticiaDAO();
+        noticiaDAO.delete(2);
     }
 }

@@ -23,7 +23,6 @@ public class FormVideojuegoController {
     @FXML private TextField desarrolladorField;
     @FXML private TextField portadaField;
     @FXML private Button guardarButton;
-    @FXML private TextField buscadorNombre;
     @FXML private Videojuego videojuegoSeleccionado;
 
     private boolean esEdicion = false;
