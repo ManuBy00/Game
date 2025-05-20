@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectgame.Controller.ContenidosController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectgame.Controller.ContenidosController">
     <children>
-      <HBox prefHeight="45.0" prefWidth="600.0" spacing="10.0">
+      <HBox prefHeight="36.0" prefWidth="621.0" spacing="10.0">
          <children>
              <Button fx:id="actualidadButton" mnemonicParsing="false" onAction="#lanzarVistaContenido" text="Actualidad" />
              <Button fx:id="VideojuegosButton" mnemonicParsing="false" onAction="#lanzarVistaVideojuegos" text="Videojuegos" />
@@ -44,7 +44,7 @@
             </VBox>
             </items>
         </SplitPane>
-        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="600.0" spacing="10.0" VBox.vgrow="NEVER">
+        <HBox alignment="CENTER" prefHeight="39.0" prefWidth="624.0" spacing="10.0" VBox.vgrow="NEVER">
             <children>
                 <Button fx:id="addButton" mnemonicParsing="false" onAction="#lanzarInsertForm" text="Añadir" />
                 <Button fx:id="updateButton" mnemonicParsing="false" onAction="#lanzarUpdateForm" text="Editar" />

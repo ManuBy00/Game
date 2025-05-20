@@ -284,5 +284,15 @@ public class VidejuegosViewController {
     }
 
     public void lanzarVistaUsuario(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/MiPerfilView.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) deleteButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

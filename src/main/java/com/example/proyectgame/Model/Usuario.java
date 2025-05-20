@@ -12,13 +12,12 @@ public class Usuario {
     private String email;
     private String contrasena;
     private Enum RolUsuario; // 'administrador' o 'jugador'
-    private List<JuegoUsuario> biblioteca;
+
 
     public Usuario(String nombre, String email, String contrasena, RolUsuario rol) {
         this.nombre = nombre;
         this.email = email;
         this.contrasena = Seguridad.hashPassword(contrasena);
-        this.biblioteca = new ArrayList<>();
         this.RolUsuario = rol;
     }
 
@@ -33,13 +32,6 @@ public class Usuario {
         this.id = id;
     }
 
-    public List<JuegoUsuario> getBiblioteca() {
-        return biblioteca;
-    }
-
-    public void setBiblioteca(List<JuegoUsuario> biblioteca) {
-        this.biblioteca = biblioteca;
-    }
 
     public Enum getRolUsuario() {
         return RolUsuario;
@@ -82,13 +74,6 @@ public class Usuario {
         return Seguridad.checkPassword(password, this.contrasena);
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                ", nombre='" + nombre + '\'' +
-                ", email='" + email + '\'' +
-                ", RolUsuario=" + RolUsuario;
-    }
 
     @Override
     public boolean equals(Object o) {

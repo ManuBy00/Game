@@ -2,9 +2,8 @@ package com.example.proyectgame.Controller;
 
 import com.example.proyectgame.DAO.GuiaDAO;
 import com.example.proyectgame.DAO.NoticiaDAO;
-import com.example.proyectgame.Model.Contenido;
-import com.example.proyectgame.Model.Guia;
-import com.example.proyectgame.Model.Noticia;
+import com.example.proyectgame.Model.*;
+import com.example.proyectgame.Utilities.Sesion;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContenidosController {
+
+    @FXML
+    public Button deteleButton;
+    @FXML
+    private Button addButton;
+
+    @FXML
+    private Button updateButton;
+
 
     @FXML
     private ListView<Contenido> contenidosList;
@@ -59,6 +67,7 @@ public class ContenidosController {
             }
         });
         cargarContenidos();
+        setVisibilidad(Sesion.getInstancia().getUsuarioIniciado());
     }
 
     private void cargarContenidos() {
@@ -191,11 +200,11 @@ public class ContenidosController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/VideojuegosView.fxml"));
             Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Videojuegos");
-            stage.setScene(new Scene(root));
+            Stage stage = (Stage) autorLabel.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
             stage.show();
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -204,5 +213,13 @@ public class ContenidosController {
 
     public void lanzarVistaContenido(ActionEvent actionEvent) {
         cargarContenidos();
+    }
+
+    public void setVisibilidad(Usuario usuarioLogeado) {
+        if (usuarioLogeado.getRolUsuario() != RolUsuario.ADMINISTRADOR) {
+            addButton.setVisible(false);
+            updateButton.setVisible(false);
+            deteleButton.setVisible(false);
+        }
     }
 }

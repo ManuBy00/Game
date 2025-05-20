@@ -5,8 +5,8 @@ import java.time.LocalDate;
 public class Guia extends Contenido {
     private Videojuego videojuego;
 
-    public Guia(String titulo, LocalDate fechaPublicacion, String portada, Usuario autor, String cuerpo, Videojuego videojuego) {
-        super(titulo, fechaPublicacion, portada, autor, cuerpo);
+    public Guia(String titulo, LocalDate fechaPublicacion, Usuario autor, String cuerpo, Videojuego videojuego) {
+        super(titulo, fechaPublicacion, autor, cuerpo);
         this.videojuego = videojuego;
     }
 

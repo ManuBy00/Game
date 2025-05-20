@@ -21,7 +21,6 @@ public class ContenidoFormController {
     @FXML private TextArea cuerpoArea;
     @FXML private DatePicker fechaPicker;
     @FXML private ComboBox<String> tipoComboBox;
-
     @FXML private Label campoExtraLabel;
     @FXML private TextField campoExtraField; // Para subtítulo de Noticia
     @FXML private ComboBox<Videojuego> campoExtraComboBox; // Para videojuego en Guía
@@ -41,8 +40,15 @@ public class ContenidoFormController {
         campoExtraComboBox.setVisible(false);
         campoExtraLabel.setVisible(false);
 
-        // Cargar videojuegos en el ComboBox
         campoExtraComboBox.setItems(FXCollections.observableArrayList(videojuegoDAO.findAll()));
+
+        campoExtraComboBox.setCellFactory(lv -> new ListCell<Videojuego>() {
+            @Override
+            protected void updateItem(Videojuego item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.getTitulo());
+            }
+        });
     }
 
     public void setContenido(Contenido contenido) {
@@ -105,7 +111,7 @@ public class ContenidoFormController {
                     mostrarAlerta("El subtítulo no puede estar vacío.");
                     return;
                 }
-                Noticia noticia = new Noticia(titulo, fecha, "Skyrim.jpg", cuerpo, autor, subtitulo);
+                Noticia noticia = new Noticia(titulo, fecha, cuerpo, autor, subtitulo);
                 noticiaDAO.insert(noticia);
             } else if ("Guia".equals(tipo)) {
                 Videojuego videojuego = campoExtraComboBox.getValue();
@@ -113,7 +119,7 @@ public class ContenidoFormController {
                     mostrarAlerta("Debes seleccionar un videojuego.");
                     return;
                 }
-                Guia guia = new Guia(titulo, fecha, "skyrim.jpg", autor, cuerpo, videojuego);
+                Guia guia = new Guia(titulo, fecha, autor, cuerpo, videojuego);
 
                 guiaDAO.insert(guia);
             }
@@ -130,7 +136,7 @@ public class ContenidoFormController {
                     mostrarAlerta("El subtítulo no puede estar vacío.");
                     return;
                 }
-                Noticia noticiaNueva = new Noticia(titulo, fecha, "Skyrim.jpg", cuerpo, autor, subtitulo);
+                Noticia noticiaNueva = new Noticia(titulo, fecha, cuerpo, autor, subtitulo);
                 noticiaDAO.update(noticiaNueva, noticiaActual);
             } else if (contenidoExistente instanceof Guia) {
                 Guia guiaActual = (Guia) contenidoExistente;
@@ -139,7 +145,7 @@ public class ContenidoFormController {
                     mostrarAlerta("Debes seleccionar un videojuego.");
                     return;
                 }
-                Guia guiaNueva = new Guia(titulo, fecha, "skyrim.jpg", autor, cuerpo, videojuego);
+                Guia guiaNueva = new Guia(titulo, fecha, autor, cuerpo, videojuego);
                 guiaDAO.update(guiaNueva, guiaActual);
             }
         }

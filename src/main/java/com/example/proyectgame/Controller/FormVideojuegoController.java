@@ -78,10 +78,10 @@ public class FormVideojuegoController {
 
             dao.insert(nuevo);
             ((Stage) guardarButton.getScene().getWindow()).close(); // Cierra la ventana
-        }catch (VideojuegoYaExisteException e){
-            Utilidades.mostrarAlerta("Nombre duplicado", e.getMessage());
         }catch (DatoNoValido e){
             Utilidades.mostrarAlerta("Error", e.getMessage());
+        }catch (VideojuegoYaExisteException e) {
+            Utilidades.mostrarAlerta("Nombre duplicado", e.getMessage());
         }
     }
 

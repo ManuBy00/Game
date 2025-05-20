@@ -12,10 +12,9 @@ public abstract class Contenido {
     private Usuario autor;
     private String cuerpo;
 
-    public Contenido(String titulo, LocalDate fechaPublicacion, String portada, Usuario autor, String cuerpo) {
+    public Contenido(String titulo, LocalDate fechaPublicacion, Usuario autor, String cuerpo) {
         this.titulo = titulo;
         this.fechaPublicacion = fechaPublicacion;
-        this.portada = portada;
         this.autor = autor;
         this.cuerpo = cuerpo;
     }

@@ -11,8 +11,8 @@ import java.util.List;
 
 public class GuiaDAO implements DAOinterface<Guia>{
 
-    private static final String SQL_UPDATE = "UPDATE guia SET titulo = ?, cuerpo = ?, fechaPublicacion = ?, portada = ?, autorId = ?, videojuegoId = ? WHERE id = ?";
-    private static final String SQL_INSERT = "INSERT INTO guia (titulo, cuerpo, fechaPublicacion, portada, autorId, videojuegoId) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE = "UPDATE guia SET titulo = ?, cuerpo = ?, fechaPublicacion = ?, autorId = ?, videojuegoId = ? WHERE id = ?";
+    private static final String SQL_INSERT = "INSERT INTO guia (titulo, cuerpo, fechaPublicacion, autorId, videojuegoId) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_DELETE_BY_ID = "DELETE FROM guia WHERE id = ?";
     private static final String SQL_FIND_ALL = "SELECT * FROM guia";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM guia WHERE id = ?";
@@ -34,9 +34,8 @@ public class GuiaDAO implements DAOinterface<Guia>{
             ps.setString(1, guia.getTitulo());
             ps.setString(2, guia.getCuerpo()); // NUEVO
             ps.setDate(3, Date.valueOf(guia.getFechaPublicacion()));
-            ps.setString(4, guia.getPortada());
-            ps.setInt(5, guia.getAutor().getId());
-            ps.setInt(6, guia.getVideojuego().getId());
+            ps.setInt(4, guia.getAutor().getId());
+            ps.setInt(5, guia.getVideojuego().getId());
 
             int filas = ps.executeUpdate();
 
@@ -89,10 +88,9 @@ public class GuiaDAO implements DAOinterface<Guia>{
                 pst.setString(1, guiaNueva.getTitulo());
                 pst.setString(2, guiaNueva.getCuerpo()); // NUEVO
                 pst.setDate(3, Date.valueOf(guiaNueva.getFechaPublicacion()));
-                pst.setString(4, guiaNueva.getPortada());
-                pst.setInt(5, guiaNueva.getAutor().getId());
-                pst.setInt(6, guiaNueva.getVideojuego().getId());
-                pst.setInt(7, guiaActual.getId());
+                pst.setInt(4, guiaNueva.getAutor().getId());
+                pst.setInt(5, guiaNueva.getVideojuego().getId());
+                pst.setInt(6, guiaActual.getId());
 
                 int filas = pst.executeUpdate();
 
@@ -121,7 +119,6 @@ public class GuiaDAO implements DAOinterface<Guia>{
                 guia.setId(rs.getInt("id"));
                 guia.setTitulo(rs.getString("titulo"));
                 guia.setFechaPublicacion(rs.getDate("fechaPublicacion").toLocalDate());
-                guia.setPortada(rs.getString("portada"));
                 guia.setCuerpo(rs.getString("cuerpo"));
 
                 Usuario autor = usuarioDAO.findById(rs.getInt("autorId"));
@@ -156,7 +153,6 @@ public class GuiaDAO implements DAOinterface<Guia>{
                 guia.setId(rs.getInt("id"));
                 guia.setTitulo(rs.getString("titulo"));
                 guia.setFechaPublicacion(rs.getDate("fechaPublicacion").toLocalDate());
-                guia.setPortada(rs.getString("portada"));
                 guia.setCuerpo(rs.getString("cuerpo"));
 
 

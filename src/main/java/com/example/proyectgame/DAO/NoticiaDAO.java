@@ -12,9 +12,9 @@ import java.util.List;
 
 public class NoticiaDAO implements DAOinterface<Noticia>{
 
-    private static final String SQL_INSERT = "INSERT INTO noticia (titulo, subtitulo, fechaPublicacion, portada, autorId, cuerpo) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT = "INSERT INTO noticia (titulo, subtitulo, fechaPublicacion, autorId, cuerpo) VALUES (?, ?, ?, ?, ?)";
 
-    private static final String SQL_UPDATE = "UPDATE noticia SET titulo = ?, subtitulo = ?, fechaPublicacion = ?, portada = ?, autorId = ?, cuerpo = ? WHERE id = ?";
+    private static final String SQL_UPDATE = "UPDATE noticia SET titulo = ?, subtitulo = ?, fechaPublicacion = ?, autorId = ?, cuerpo = ? WHERE id = ?";
 
     private static final String SQL_DELETE_BY_ID = "DELETE FROM noticia WHERE id = ?";
 
@@ -37,9 +37,8 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
             ps.setString(1, noticia.getTitulo());
             ps.setString(2, noticia.getSubtitulo());
             ps.setDate(3, Date.valueOf(noticia.getFechaPublicacion()));
-            ps.setString(4, noticia.getPortada());
-            ps.setInt(5, noticia.getAutor().getId());
-            ps.setString(6, noticia.getCuerpo());
+            ps.setInt(4, noticia.getAutor().getId());
+            ps.setString(5, noticia.getCuerpo());
 
             int filas = ps.executeUpdate();
 
@@ -80,10 +79,9 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
                 pst.setString(1, noticiaNueva.getTitulo());
                 pst.setString(2, noticiaNueva.getSubtitulo());
                 pst.setDate(3, Date.valueOf(noticiaNueva.getFechaPublicacion()));
-                pst.setString(4, noticiaNueva.getPortada());
-                pst.setInt(5, noticiaNueva.getAutor().getId());
-                pst.setString(6, noticiaNueva.getCuerpo());
-                pst.setInt(7, noticiaActual.getId());
+                pst.setInt(4, noticiaNueva.getAutor().getId());
+                pst.setString(5, noticiaNueva.getCuerpo());
+                pst.setInt(6, noticiaActual.getId());
 
                 int filas = pst.executeUpdate();
                 result = filas > 0;
@@ -108,7 +106,6 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
                 noticia.setTitulo(rs.getString("titulo"));
                 noticia.setSubtitulo(rs.getString("subtitulo"));
                 noticia.setFechaPublicacion(rs.getDate("fechaPublicacion").toLocalDate());
-                noticia.setPortada(rs.getString("portada"));
                 noticia.setCuerpo(rs.getString("cuerpo"));
 
                 int autorId = rs.getInt("autorId");
@@ -137,7 +134,6 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
                 noticia.setTitulo(rs.getString("titulo"));
                 noticia.setSubtitulo(rs.getString("subtitulo"));
                 noticia.setFechaPublicacion(rs.getDate("fechaPublicacion").toLocalDate());
-                noticia.setPortada(rs.getString("portada"));
                 noticia.setCuerpo(rs.getString("cuerpo"));
 
                 int autorId = rs.getInt("autorId");
@@ -164,7 +160,6 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
                 noticia.setTitulo(rs.getString("titulo"));
                 noticia.setSubtitulo(rs.getString("subtitulo"));
                 noticia.setFechaPublicacion(rs.getDate("fechaPublicacion").toLocalDate());
-                noticia.setPortada(rs.getString("portada"));
                 noticia.setCuerpo(rs.getString("cuerpo"));
 
                 int autorId = rs.getInt("autorId");

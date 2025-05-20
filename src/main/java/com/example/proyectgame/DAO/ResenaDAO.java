@@ -17,6 +17,7 @@ public class ResenaDAO implements DAOinterface <Resena>{
     private final static String SQL_FIND_BY_ID = "SELECT * FROM resena WHERE id = ?";
     private final static String SQL_FIND_BY_VIDEOJUEGO = "SELECT * FROM resena WHERE videojuegoid = ?";
     private final static String SQL_FIND_RESENA_VIDEOJUEGO_USUARIO = "SELECT COUNT(*) FROM resena WHERE usuarioId = ? AND videojuegoId = ?";
+    private final static String SQL_FIND_BY_USUARIO = "SELECT * FROM resena WHERE usuarioid = ?";
 
     public  boolean insert(Resena resena) {
         boolean added = false;
@@ -143,12 +144,8 @@ public class ResenaDAO implements DAOinterface <Resena>{
             while (rs.next()) {
                 UsuarioDAO usuarioDAO = new UsuarioDAO();
                 Usuario usuario = usuarioDAO.findById(rs.getInt("Usuarioid"));
-                Resena resena = new Resena(
-                        rs.getString("comentario"),
-                        rs.getInt("puntuacion"),
-                        videojuego,
-                        usuario
-                );
+                Resena resena = new Resena(rs.getString("comentario"), rs.getInt("puntuacion"), videojuego, usuario);
+
                 resena.setId(rs.getInt("id"));
                 resena.setFechaPublicacion(rs.getDate("fecha").toLocalDate());
                 resenas.add(resena);
@@ -180,5 +177,38 @@ public class ResenaDAO implements DAOinterface <Resena>{
             e.printStackTrace();
         }
         return existe;
+    }
+
+    public List<Resena> findByUsuario(int id) {
+        List<Resena> resenas = new ArrayList<>();
+
+        try {
+            Connection conn = ConnectionBD.getConnection();
+            String sql = SQL_FIND_BY_USUARIO;
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id); // usamos el ID del objeto Usuario
+            ResultSet rs = stmt.executeQuery();
+
+
+            while (rs.next()) {
+                Resena resena = new Resena();
+                VideojuegoDAO videojuegoDAO = new VideojuegoDAO();
+                UsuarioDAO usuarioDAO = new UsuarioDAO();
+
+                resena.setId(rs.getInt("id"));
+                resena.setPuntuacion(rs.getInt("puntuacion"));
+                resena.setComentario(rs.getString("comentario"));
+                resena.setVideojuego(videojuegoDAO.findById(rs.getInt("videojuegoId")));
+                resena.setUsuario(usuarioDAO.findById(rs.getInt("usuarioId")));
+                if (rs.getDate("fecha") != null) {
+                    resena.setFechaPublicacion(rs.getDate("fecha").toLocalDate());
+                }
+                resenas.add(resena);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resenas;
     }
 }

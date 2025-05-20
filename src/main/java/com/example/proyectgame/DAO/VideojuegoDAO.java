@@ -1,6 +1,7 @@
 package com.example.proyectgame.DAO;
 
 import com.example.proyectgame.DataBase.ConnectionBD;
+import com.example.proyectgame.Exceptions.DatoNoValido;
 import com.example.proyectgame.Exceptions.VideojuegoYaExisteException;
 import com.example.proyectgame.Model.Genero;
 import com.example.proyectgame.Model.Videojuego;
@@ -16,7 +17,6 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
     private static final String SQL_FIND_BY_NAME = "SELECT * FROM videojuego WHERE titulo = ?";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM videojuego WHERE id = ?";
     private static final String SQL_DELETE_BY_ID = "DELETE FROM videojuego WHERE id = ?";
-    private final static String SQL_DELETE_BY_NAME =  "DELETE FROM videojuego WHERE titulo = ?";
     private final static String SQL_FIND_BY_GENERO = "SELECT * FROM videojuego WHERE genero = ?";
 
 
@@ -25,6 +25,11 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
         if (videojuego != null && findByName(videojuego.getTitulo()) != null) {
             throw new VideojuegoYaExisteException("Ya existe un videojuego con este nombre.");
         }
+
+        if (videojuego.getTitulo() == null || videojuego.getDescripcion() == null || videojuego.getGenero() == null ||  videojuego.getDesarrolladora() == null || videojuego.getPortada() == null) {
+            throw new DatoNoValido("Se deben rellenar todos los campos.");
+        }
+
         try {
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);

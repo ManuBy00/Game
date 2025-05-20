@@ -5,8 +5,8 @@ import java.time.LocalDate;
 public class Noticia extends Contenido {
     private String subtitulo;
 
-    public Noticia(String titulo, LocalDate fechaPublicacion, String portada, String cuerpo, Usuario autor, String subtitulo) {
-        super(titulo, fechaPublicacion, portada, autor, cuerpo);
+    public Noticia(String titulo, LocalDate fechaPublicacion, String cuerpo, Usuario autor, String subtitulo) {
+        super(titulo, fechaPublicacion, autor, cuerpo);
         this.subtitulo = subtitulo;
     }
 
