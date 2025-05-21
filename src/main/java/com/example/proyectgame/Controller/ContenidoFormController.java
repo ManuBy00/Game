@@ -10,10 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+
 
 public class ContenidoFormController {
 
@@ -35,7 +33,6 @@ public class ContenidoFormController {
     public void initialize() {
         tipoComboBox.getItems().addAll("Noticia", "Guia");
         tipoComboBox.setOnAction(e -> actualizarCampoExtra());
-
         campoExtraField.setVisible(false);
         campoExtraComboBox.setVisible(false);
         campoExtraLabel.setVisible(false);

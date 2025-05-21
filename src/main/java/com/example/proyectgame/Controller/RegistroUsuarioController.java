@@ -58,12 +58,12 @@ public class RegistroUsuarioController {
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         try{
-            usuarioDAO.insert(nuevoUsuario);
+            if (usuarioDAO.insert(nuevoUsuario)){
+                mostrarAlerta("Éxito", "Usuario registrado correctamente.");
+            }
         }catch (UsuarioExiste e){
             mostrarAlerta("Error", e.getMessage());
         }
-
-        mostrarAlerta("Éxito", "Usuario registrado correctamente.");
 
         // Cerrar ventana
         Stage stage = (Stage) registrarButton.getScene().getWindow();
