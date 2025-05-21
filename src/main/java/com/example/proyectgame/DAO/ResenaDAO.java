@@ -25,7 +25,6 @@ public class ResenaDAO implements DAOinterface <Resena>{
             throw new ResenaYaExisteException("El usuario ya ha reseñado este videojuego.");
         }
 
-
         try {
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);

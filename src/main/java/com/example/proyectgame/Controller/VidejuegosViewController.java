@@ -23,8 +23,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
 public class VidejuegosViewController {
@@ -148,15 +147,7 @@ public class VidejuegosViewController {
         VBox vbox = new VBox(5);
         vbox.setAlignment(Pos.CENTER);
 
-
-        // Carga de la imagen desde recursos. Si no se encuentra la imagen, se pone una por defecto
-        String rutaImagen = juego.getPortadaUrl();
-        InputStream input = getClass().getResourceAsStream(rutaImagen);
-        if (input == null) {
-            input = getClass().getResourceAsStream("/com/example/proyectgame/Portadas/default.png");
-        }
-
-        Image imagen = new Image(input, 120, 160, true, true);
+        Image imagen = cargarImagenPortada(juego);
 
         ImageView imageView = new ImageView(imagen);
 
@@ -295,5 +286,29 @@ public class VidejuegosViewController {
         }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Image cargarImagenPortada(Videojuego juego) {
+        String rutaRelativa = "/com/example/proyectgame/Portadas/" + juego.getPortada();
+
+        // Primero intenta cargar como recurso empaquetado
+        InputStream recursoStream = getClass().getResourceAsStream(rutaRelativa);
+        if (recursoStream != null) {
+            return new Image(recursoStream, 120, 160, true, true);
+        }
+
+        // Si no existe como recurso (ej. imagen añadida en caliente), intenta cargarla desde fichero
+        File archivo = new File("src/main/resources/com/example/proyectgame/Portadas/" + juego.getPortada());
+        if (archivo.exists()) {
+            try {
+                return new Image(new FileInputStream(archivo), 120, 160, true, true);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Si falla todo, carga la imagen por defecto
+        InputStream defaultStream = getClass().getResourceAsStream("/com/example/proyectgame/Portadas/default.png");
+        return new Image(defaultStream, 120, 160, true, true);
     }
 }

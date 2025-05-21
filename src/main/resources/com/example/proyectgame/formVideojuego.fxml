@@ -26,8 +26,12 @@
                 <Label text="Desarrollador" />
                 <TextField fx:id="desarrolladorField" />
 
-                <Label text="Nombre de la portada" />
-                <TextField fx:id="portadaField" />
+                <Label text="Portada" />
+                <HBox spacing="10">
+                    <Button fx:id="imagenButton" onAction="#seleccionarImagen" text="Seleccionar imagen" />
+                    <Label fx:id="nombreImagenLabel" text="Ningún archivo seleccionado" />
+                </HBox>
+
 
                 <Button fx:id="guardarButton" maxWidth="Infinity" onAction="#guardarButton" text="Guardar" />
             </children>
