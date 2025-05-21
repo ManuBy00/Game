@@ -32,8 +32,6 @@ public class Main {
         Videojuego juego = new Videojuego(titulo, descripcion, desarrolladora, genero, fechaLanzamiento, portada);
 
         videojuegoDAO.insert(juego);*/
-
-        NoticiaDAO noticiaDAO = new NoticiaDAO();
-        noticiaDAO.delete(2);
+        
     }
 }

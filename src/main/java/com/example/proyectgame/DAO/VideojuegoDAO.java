@@ -34,7 +34,8 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
             throw new VideojuegoYaExisteException("Ya existe un videojuego con este nombre.");
         }
 
-        if (videojuego.getTitulo() == null || videojuego.getDescripcion() == null || videojuego.getGenero() == null ||  videojuego.getDesarrolladora() == null || videojuego.getPortada() == null) {
+        if (videojuego.getTitulo() == null || videojuego.getDescripcion() == null || videojuego.getGenero() == null ||
+                videojuego.getDesarrolladora() == null || videojuego.getPortada() == null) {
             throw new DatoNoValido("Se deben rellenar todos los campos.");
         }
 
