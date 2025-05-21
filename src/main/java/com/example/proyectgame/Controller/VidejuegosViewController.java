@@ -45,7 +45,13 @@ public class VidejuegosViewController {
     @FXML
     private TextField buscadorNombre;
 
-
+    /**
+     * Metodo de inicialización del controlador
+     * - Carga todos los géneros en el ComboBox.
+     * - Añade un listener al campo de texto del buscador para aplicar el filtro en tiempo real.
+     * - Carga todos los videojuegos desde la base de datos y los muestra en pantalla.
+     *
+     */
     @FXML
     public void initialize() {
         comboGenero.getItems().addAll(Genero.values());
@@ -58,6 +64,11 @@ public class VidejuegosViewController {
         cargarVideojuegos();
     }
 
+    /**
+     * Aplica un filtro por género usando el ComboBox.
+     * Si no hay género seleccionado, se muestran todos los videojuegos.
+     * Si hay uno seleccionado, se consultan solo los videojuegos de ese género.
+     */
     @FXML
     private void aplicarFiltroGenero(ActionEvent event) {
         Genero generoSeleccionado = comboGenero.getValue();
@@ -74,6 +85,11 @@ public class VidejuegosViewController {
         mostrarVideojuegos(videojuegos);
     }
 
+    /**
+     * Aplica un filtro combinando el texto del campo buscador y el género seleccionado.
+     * Se filtran los videojuegos cuyo título contiene el texto buscado
+     * y, si hay un género seleccionado, que también coincidan con él.
+     */
     private void aplicarFiltroBusqueda() {
         String texto = buscadorNombre.getText().toLowerCase();
         Genero generoSeleccionado = comboGenero.getValue();
@@ -81,17 +97,16 @@ public class VidejuegosViewController {
         VideojuegoDAO dao = new VideojuegoDAO();
         List<Videojuego> videojuegos = dao.findAll();
 
-        List<Videojuego> filtrados = videojuegos.stream()
-                .filter(v -> v.getTitulo().toLowerCase().contains(texto))
-                .filter(v -> generoSeleccionado == null || v.getGenero().equals(generoSeleccionado))
-                .toList();
+        List<Videojuego> filtrados = videojuegos.stream().filter(v -> v.getTitulo().toLowerCase().contains(texto))
+                .filter(v -> generoSeleccionado == null || v.getGenero().equals(generoSeleccionado)).toList();
 
         mostrarVideojuegos(filtrados);
     }
 
     /**
-     * Muestra en pantalla los videojuegos resultantes de una lista específica.
-     * @param videojuegos
+     * Muestra en el GridPane los videojuegos recibidos.
+     * Se colocan en una cuadrícula de 3 columnas por fila.
+     * @param videojuegos Lista de videojuegos a mostrar
      */
     private void mostrarVideojuegos(List<Videojuego> videojuegos) {
         gridPaneVideojuegos.getChildren().clear(); // Limpiar anteriores
@@ -111,6 +126,11 @@ public class VidejuegosViewController {
         }
     }
 
+    /**
+     * Establece la visibilidad de los botones según el rol del usuario.
+     * Si el usuario no es administrador, se ocultan los botones de añadir, editar y borrar.
+     * @param usuarioLogeado El usuario que ha iniciado sesión
+     */
     public void setVisibilidad(Usuario usuarioLogeado) {
         if (usuarioLogeado.getRolUsuario() != RolUsuario.ADMINISTRADOR) {
             addButton.setVisible(false);
@@ -119,6 +139,10 @@ public class VidejuegosViewController {
         }
     }
 
+    /**
+     * Carga todos los videojuegos de la base de datos y los muestra en el GridPane.
+     * Se usa una cuadrícula de 3 columnas por fila.
+     */
     public void cargarVideojuegos() {
         // Obtener la lista de videojuegos de la BD
         VideojuegoDAO videojuegoDAO = new VideojuegoDAO();
@@ -143,6 +167,13 @@ public class VidejuegosViewController {
         }
     }
 
+    /**
+     * Crea y devuelve un VBox que representa visualmente un videojuego en el GridPane.
+     * Incluye la portada, el título y un botón para ver detalles.
+     * También permite seleccionar la celda visualmente.
+     * @param juego El videojuego que se va a mostrar
+     * @return Un VBox que contiene la información del videojuego
+     */
     private VBox crearCeldaJuego(Videojuego juego) {
         VBox vbox = new VBox(5);
         vbox.setAlignment(Pos.CENTER);
@@ -177,6 +208,10 @@ public class VidejuegosViewController {
         return vbox;
     }
 
+    /**
+     * Abre el formulario para insertar un nuevo videojuego.
+     * Al cerrarlo, recarga la lista de videojuegos en pantalla.
+     */
     public void lanzarFormularioInsert(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/formVideojuego.fxml"));
@@ -196,14 +231,20 @@ public class VidejuegosViewController {
         }
     }
 
+    /**
+     * Elimina el videojuego actualmente seleccionado.
+     * Muestra una confirmación antes de borrar y recarga la vista si se confirma.
+     */
     public void deleteVideojuego(ActionEvent actionEvent) {
         if (videojuegoSeleccionado != null) {
             VideojuegoDAO dao = new VideojuegoDAO();
+            //pide confirmación
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Confirmar borrado");
             confirm.setHeaderText("¿Seguro que quieres eliminar este videojuego?");
             confirm.setContentText(videojuegoSeleccionado.getTitulo());
             confirm.showAndWait();
+            //borra y deja los valores a null
             dao.delete(videojuegoSeleccionado.getId());
             videojuegoSeleccionado = null;
             celdaSeleccionada = null;
@@ -214,6 +255,10 @@ public class VidejuegosViewController {
         }
     }
 
+    /**
+     * Lanza el formulario de edición con los datos del videojuego seleccionado.
+     * Tras cerrar el formulario, recarga la lista de videojuegos.
+     */
     public void lanzarFormularioUpdate(ActionEvent actionEvent) {
         if (videojuegoSeleccionado != null) {
             try {
@@ -221,7 +266,7 @@ public class VidejuegosViewController {
                 Parent root = loader.load();
 
                 FormVideojuegoController controller = loader.getController();
-                controller.setVideojuego(videojuegoSeleccionado); // Este metodo activa el modo edición
+                controller.setVideojuego(videojuegoSeleccionado); // esta línea activa el modo edición del formulario
 
                 Stage stage = new Stage();
                 stage.setTitle("Editar videojuego");
@@ -236,6 +281,10 @@ public class VidejuegosViewController {
         }
     }
 
+    /**
+     * Muestra la vista de detalles del videojuego seleccionado.
+     * Carga el archivo FXML correspondiente y le pasa el videojuego al controlador.
+     */
     @FXML
     private void verDetalles(Videojuego videojuego) {
         try {
@@ -255,12 +304,18 @@ public class VidejuegosViewController {
         }
     }
 
+    /**
+     * Limpia el campo de búsqueda y recarga todos los videojuegos sin filtros.
+     */
     @FXML
     public void limpiarFiltros(ActionEvent actionEvent) {
         buscadorNombre.clear();
         cargarVideojuegos();
     }
 
+    /**
+     * Abre la vista que muestra contenidos como noticias o guías.
+     */
     @FXML
     public void lanzarVistaContenido(ActionEvent actionEvent) {
         try {
@@ -275,6 +330,9 @@ public class VidejuegosViewController {
         }
     }
 
+    /**
+     * Abre la vista del perfil de usuario.
+     */
     public void lanzarVistaUsuario(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/MiPerfilView.fxml"));
@@ -288,16 +346,24 @@ public class VidejuegosViewController {
         }
     }
 
+    /**
+     * Carga la imagen de portada de un videojuego.
+     * Primero intenta cargarla como recurso de la aplicación.
+     * Si no está empaquetada (por ejemplo, si se añadió en caliente), intenta desde el sistema de archivos.
+     * Si todo falla, carga una imagen por defecto.
+     * @param juego El videojuego cuya imagen se quiere cargar
+     * @return La imagen lista para mostrar
+     */
     private Image cargarImagenPortada(Videojuego juego) {
         String rutaRelativa = "/com/example/proyectgame/Portadas/" + juego.getPortada();
 
-        // Primero intenta cargar como recurso empaquetado
+        // Primero intenta cargar la imagen del resource/portadas
         InputStream recursoStream = getClass().getResourceAsStream(rutaRelativa);
         if (recursoStream != null) {
             return new Image(recursoStream, 120, 160, true, true);
         }
 
-        // Si no existe como recurso (ej. imagen añadida en caliente), intenta cargarla desde fichero
+        //Si la imagen se ha subido en tiempo de ejecución, no la va a encontrar, por lo que le damos la ruta completa
         File archivo = new File("src/main/resources/com/example/proyectgame/Portadas/" + juego.getPortada());
         if (archivo.exists()) {
             try {

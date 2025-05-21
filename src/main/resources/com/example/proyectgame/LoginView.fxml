@@ -24,7 +24,7 @@
             <Button onAction="#EjecutarLogin" text="Iniciar sesión" />
 
             <Label fx:id="errorLabel" textFill="RED" visible="false" />
-         <Label prefHeight="18.0" prefWidth="141.0" text="¿No tienes cuenta? creala">
+         <Label prefHeight="18.0" prefWidth="141.0" text="¿No tienes cuenta? Creala">
             <VBox.margin>
                <Insets />
             </VBox.margin></Label>

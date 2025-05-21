@@ -21,7 +21,7 @@
                 <ListView fx:id="contenidosList" onMouseClicked="#mostrarContenidoSeleccionado" prefHeight="200.0" prefWidth="200.0" />
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="tituloLabel" alignment="CENTER" prefHeight="18.0" prefWidth="404.0" text="TITULO" textAlignment="CENTER">
+                  <Label fx:id="tituloLabel" alignment="CENTER" prefHeight="35.0" prefWidth="453.0" text="TITULO" textAlignment="CENTER">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -34,9 +34,9 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="cuerpoLabel" alignment="TOP_LEFT" prefHeight="206.0" prefWidth="408.0" text="Cuerpo" />
-                  <Label fx:id="autorLabel" prefHeight="18.0" prefWidth="75.0" text="Autor" />
-                  <Label fx:id="fechaLabel" text="Fecha label" />
+                  <Label fx:id="cuerpoLabel" alignment="TOP_LEFT" prefHeight="206.0" prefWidth="443.0" text="Cuerpo" />
+                  <Label fx:id="autorLabel" prefHeight="18.0" prefWidth="139.0" text="Autor" />
+                  <Label fx:id="fechaLabel" prefHeight="18.0" prefWidth="127.0" text="Fecha label" />
                </children>
                <padding>
                   <Insets left="10.0" />

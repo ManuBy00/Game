@@ -26,6 +26,12 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
+    /**
+     * Metodo de inicialización.
+     * Oculta la etiqueta de error al iniciar.
+     * Añade una funcion lambda para que al pulsar ENTER en el campo de contraseña se ejecute el login.
+     * Se ejecuta automáticamente al cargar la vista del login.
+     */
     @FXML
     public void initialize() {
         errorLabel.setVisible(false);
@@ -38,6 +44,13 @@ public class LoginController {
         });
     }
 
+    /**
+     * Ejecuta el proceso de inicio de sesión.
+     * Obtiene el email y contraseña introducidos.
+     * Valida que no estén vacíos, mostrando error si lo están.
+     * Si es correcto, guarda el usuario en la sesión y carga la vista principal de videojuegos.
+     * Si no, muestra un mensaje de error.
+     */
     @FXML
     public void EjecutarLogin() {
         //declaramos los datos que obtenemos del usuario
@@ -82,6 +95,11 @@ public class LoginController {
         }
     }
 
+    /**
+     * Abre el formulario para crear una nueva cuenta .
+     * Crea una nueva ventana (Stage) para mostrar el formulario.
+     * @param actionEvent Evento que dispara la acción (clic en el botón).
+     */
     public void formularioCrearCuenta(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/registro_usuario.fxml"));
@@ -90,7 +108,6 @@ public class LoginController {
             Stage stage = new Stage();
             stage.setTitle("Registro de Usuario");
             stage.setScene(new Scene(root));
-            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

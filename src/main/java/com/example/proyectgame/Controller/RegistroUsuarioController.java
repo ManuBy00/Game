@@ -32,12 +32,27 @@ public class RegistroUsuarioController {
     @FXML
     private Button registrarButton;
 
+
+    /**
+     * Metodo de inicialización.
+     * Carga todos los roles (Administrador y Jugador) en el ComboBox.
+     */
     @FXML
     public void initialize() {
         // Llenar comboBox con roles
         rolComboBox.setItems(FXCollections.observableArrayList(RolUsuario.ADMINISTRADOR, RolUsuario.JUGADOR));
     }
 
+    /**
+     * Metodo que se ejecuta al pulsar el botón "Registrar".
+     * Recoge los datos del formulario (nombre, email, contraseña, rol).
+     * Valida que todos los campos estén rellenos y que el correo tenga un formato válido.
+     * Si todo es correcto, crea un nuevo objeto Usuario y lo guarda en la base de datos mediante el DAO.
+     * Si el usuario ya existe, muestra un mensaje de error.
+     * Si el registro es exitoso, muestra un mensaje de confirmación y cierra la ventana de registro.
+     *
+     * @param actionEvent Evento que dispara la acción (clic del botón).
+     */
     public void registrarUsuario(ActionEvent actionEvent) {
         String nombre = nombreField.getText();
         String email = emailField.getText();

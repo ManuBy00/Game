@@ -4,6 +4,7 @@ import com.example.proyectgame.DAO.GuiaDAO;
 import com.example.proyectgame.DAO.NoticiaDAO;
 import com.example.proyectgame.Model.*;
 import com.example.proyectgame.Utilities.Sesion;
+import com.example.proyectgame.Utilities.Utilidades;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,6 +54,12 @@ public class ContenidosController {
 
     private Contenido contenidoSeleccionado;
 
+    /**
+     * Inicializa la vista del contenido.
+     * Configura cómo se muestran los elementos de la listView.
+     * Carga los contenidos (noticias y guías).
+     * Ajusta la visibilidad de los botones según el usuario logeado.
+     */
     @FXML
     public void initialize() {
         contenidosList.setCellFactory(listView -> new ListCell<>() {
@@ -70,6 +77,10 @@ public class ContenidosController {
         setVisibilidad(Sesion.getInstancia().getUsuarioIniciado());
     }
 
+    /**
+     * Carga todas las noticias y guías desde la base de datos
+     * y las añade a la lista de contenidos para mostrarlas en el listView de contenidos.
+     */
     private void cargarContenidos() {
         List<Noticia> noticias = noticiaDAO.findAll();
         List<Guia> guias = guiaDAO.findAll();
@@ -81,6 +92,10 @@ public class ContenidosController {
         contenidosList.getItems().setAll(contenidos);
     }
 
+    /**
+     * Muestra los detalles del contenido seleccionado en la interfaz al hacer clic con el ratón.
+     * @param event evento del ratón
+     */
     @FXML
     private void mostrarContenidoSeleccionado(MouseEvent event) {
         contenidoSeleccionado = contenidosList.getSelectionModel().getSelectedItem();
@@ -89,6 +104,11 @@ public class ContenidosController {
         }
     }
 
+    /**
+     * Muestra los datos del contenido en los labels de la interfaz.
+     * Si es una Noticia muestra su subtítulo; si es una Guía, el título del videojuego.
+     * @param contenido contenido a mostrar
+     */
     private void mostrarContenido(Contenido contenido) {
         tituloLabel.setText(contenido.getTitulo());
 
@@ -103,7 +123,7 @@ public class ContenidosController {
             cuerpoLabel.setText("");
         }
 
-        autorLabel.setText("Autor: " + (contenido.getAutor() != null ? contenido.getAutor().getNombre() : "Desconocido"));
+        autorLabel.setText("Autor: " + contenido.getAutor().getNombre());
 
         if (contenido.getFechaPublicacion() != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -113,6 +133,11 @@ public class ContenidosController {
         }
     }
 
+    /**
+     * Abre el formulario de inserción o edición de contenido.
+     * Si se pasa un contenido, se abre en modo edición (esto lo hace le metodo setContenido()).
+     * @param contenido contenido a editar o null para crear uno nuevo
+     */
     private void abrirFormulario(Contenido contenido) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/ContenidoForm.fxml"));
@@ -127,7 +152,7 @@ public class ContenidosController {
             stage.setTitle(contenido == null ? "Insertar Contenido" : "Editar Contenido");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL); // BLOQUEA hasta cerrar
-            stage.showAndWait(); // ESPERA a que se cierre
+            stage.showAndWait(); //
 
 
         } catch (IOException e) {
@@ -135,22 +160,33 @@ public class ContenidosController {
         }
     }
 
+    /**
+     * Lanza el formulario para insertar un nuevo contenido.
+     */
     @FXML
     private void lanzarInsertForm() {
         abrirFormulario(null);
         cargarContenidos();
     }
 
+    /**
+     * Lanza el formulario para editar el contenido seleccionado.
+     * Si no hay contenido seleccionado, muestra una alerta.
+     */
     @FXML
     private void lanzarUpdateForm() {
         if (contenidoSeleccionado == null) {
-            mostrarAlerta("Selecciona un contenido para editar.");
+            Utilidades.mostrarAlerta("Atención", "Selecciona un contenido para editar.");
             return;
         }
         abrirFormulario(contenidoSeleccionado);
         cargarContenidos();
     }
 
+    /**
+     * Elimina el contenido seleccionado si el usuario confirma la acción.
+     * Muestra una alerta si no hay ningún contenido seleccionado.
+     */
     @FXML
     private void DeleteContenido() {
         if (contenidoSeleccionado != null) {
@@ -172,10 +208,13 @@ public class ContenidosController {
                 }
             });
         } else {
-            mostrarAlerta("Selecciona un contenido para borrar.");
+            Utilidades.mostrarAlerta("Atención","Selecciona un contenido para borrar.");
         }
     }
 
+    /**
+     * Limpia los campos de la interfaz.
+     */
     private void limpiarVista() {
         tituloLabel.setText("TITULO");
         subtituloLabel.setText("SUBTITULO");
@@ -184,14 +223,10 @@ public class ContenidosController {
         fechaLabel.setText("Fecha label");
     }
 
-    private void mostrarAlerta(String mensaje) {
-        Alert alerta = new Alert(Alert.AlertType.WARNING);
-        alerta.setTitle("Atención");
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
-    }
-
+    /**
+     * Navega a la vista del perfil de usuario.
+     * @param actionEvent evento del botón
+     */
     public void lanzarVistaUsuario(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/MiPerfilView.fxml"));
@@ -205,6 +240,10 @@ public class ContenidosController {
         }
     }
 
+    /**
+     * Navega a la vista de videojuegos.
+     * @param actionEvent evento del botón
+     */
     public void lanzarVistaVideojuegos(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/VideojuegosView.fxml"));
@@ -220,10 +259,18 @@ public class ContenidosController {
         }
     }
 
+    /**
+     * Recarga los contenidos mostrados en la vista.
+     * @param actionEvent evento del botón
+     */
     public void lanzarVistaContenido(ActionEvent actionEvent) {
         cargarContenidos();
     }
 
+    /**
+     * Ajusta la visibilidad de los botones según el rol del usuario logeado.
+     * @param usuarioLogeado el usuario actualmente en sesión
+     */
     public void setVisibilidad(Usuario usuarioLogeado) {
         if (usuarioLogeado.getRolUsuario() != RolUsuario.ADMINISTRADOR) {
             addButton.setVisible(false);

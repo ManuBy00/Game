@@ -5,6 +5,7 @@ import com.example.proyectgame.DAO.UsuarioDAO;
 import com.example.proyectgame.Model.Resena;
 import com.example.proyectgame.Model.RolUsuario;
 import com.example.proyectgame.Model.Usuario;
+import com.example.proyectgame.Utilities.Seguridad;
 import com.example.proyectgame.Utilities.Sesion;
 import com.example.proyectgame.Utilities.Utilidades;
 import javafx.collections.FXCollections;
@@ -34,13 +35,21 @@ public class MiPerfilView {
 
     private Usuario usuario = Sesion.getInstancia().getUsuarioIniciado();
 
-
+    /**
+     * Metodo de inicialización.
+     * Carga las reseñas del usuario actual en la lista.
+     * Muestra el nombre del usuario actual en la interfaz.
+     */
     @FXML
     public void initialize() {
         cargarListaResenas();
         setUsuarioActualLabel(usuario.getNombre());
     }
 
+    /**
+     * Carga todas las reseñas del usuario actual desde la base de datos.
+     * Muestra las reseñas en un ListView.
+     */
     public void cargarListaResenas(){
         ResenaDAO resenaDAO = new ResenaDAO();
         List<Resena> listaResenasUsuario = resenaDAO.findByUsuario(usuario.getId());
@@ -60,10 +69,22 @@ public class MiPerfilView {
         });
     }
 
+    /**
+     * Muestra el nombre del usuario actual en la etiqueta superior.
+     * @param usuarioActual Nombre del usuario actual.
+     */
     public void setUsuarioActualLabel(String usuarioActual){
         usuarioActualLabel.setText("Usuario: " + usuarioActual);
     }
 
+    /**
+     * Guarda los cambios realizados por el usuario en su perfil.
+     * Actualiza el nombre y/o contraseña si han sido modificados.
+     * Llama al DAO para actualizar los datos en la base de datos.
+     * Actualiza la etiqueta del nombre del usuario.
+     * Muestra una alerta indicando que se ha actualizado correctamente.
+     * @param actionEvent Evento que dispara la acción (clic del botón).
+     */
     public void guardarCambiosUsuario(ActionEvent actionEvent) {
         String password = passwordField.getText();
         String nombre = usuarioField.getText();
@@ -71,7 +92,7 @@ public class MiPerfilView {
         Usuario usuarioNuevo = usuario;
 
         if (!password.isEmpty()) {
-            usuarioNuevo.setContrasena(password);
+            usuarioNuevo.setContrasena(Seguridad.hashPassword(password));
         }
 
         if (!nombre.isEmpty()) {
@@ -83,20 +104,12 @@ public class MiPerfilView {
         Utilidades.mostrarAlerta("Usuario actualizado", "Usuario actualizado correctamente");
     }
 
-    @FXML
-    public void lanzarVistaContenido(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/ContenidosView.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) usuarioActualLabel.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Lanza la vista principal de videojuegos.
+     * Carga la vista VideojuegosView.fxml.
+     * Reemplaza la escena actual con la nueva vista.
+     * @param actionEvent Evento que dispara la acción.
+     */
     public void lanzarVistaVideojuegos(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/VideojuegosView.fxml"));
@@ -111,7 +124,14 @@ public class MiPerfilView {
         }
     }
 
-
+    /**
+     * Elimina la reseña seleccionada por el usuario en la lista.
+     * - Comprueba que haya una reseña seleccionada.
+     * - Llama al DAO para eliminarla de la base de datos.
+     * - Muestra una alerta con el resultado (éxito o error).
+     * - Recarga la lista de reseñas tras eliminar.
+     * @param actionEvent Evento que dispara la acción (clic del botón).
+     */
     public void borrarResena(ActionEvent actionEvent) {
         Resena resena = ResenasListView.getSelectionModel().getSelectedItem();
         if (resena == null) {

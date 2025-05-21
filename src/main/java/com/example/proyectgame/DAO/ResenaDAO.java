@@ -19,6 +19,15 @@ public class ResenaDAO implements DAOinterface <Resena>{
     private final static String SQL_FIND_RESENA_VIDEOJUEGO_USUARIO = "SELECT COUNT(*) FROM resena WHERE usuarioId = ? AND videojuegoId = ?";
     private final static String SQL_FIND_BY_USUARIO = "SELECT * FROM resena WHERE usuarioid = ?";
 
+
+    /**
+     * Inserta una nueva reseña en la base de datos.
+     * Si el usuario ya ha reseñado el videojuego, lanza una excepción.
+     * @param resena la reseña que se desea insertar
+     * @return true si la reseña fue insertada correctamente, false en caso contrario
+     * @throws ResenaYaExisteException si ya existe una reseña del mismo usuario para el videojuego
+     * @throws RuntimeException si ocurre un error al acceder a la base de datos
+     */
     public  boolean insert(Resena resena) {
         boolean added = false;
         if (existeResena(resena.getUsuario().getId(), resena.getVideojuego().getId())) {
@@ -46,6 +55,12 @@ public class ResenaDAO implements DAOinterface <Resena>{
         return added;
     }
 
+    /**
+     * Elimina una reseña de la base de datos por su ID.
+     * @param id el ID de la reseña a eliminar
+     * @return true si la reseña fue eliminada correctamente, false en caso contrario
+     * @throws RuntimeException si ocurre un error al acceder a la base de datos
+     */
     public boolean delete(int id) {
         boolean deleted = false;
         try {
@@ -62,6 +77,13 @@ public class ResenaDAO implements DAOinterface <Resena>{
         return deleted;
     }
 
+    /**
+     * Actualiza una reseña existente con nuevos datos.
+     * @param resenaNueva la nueva información de la reseña
+     * @param resenaActual la reseña actual que se va a actualizar
+     * @return true si se actualizó correctamente, false en caso contrario
+     * @throws RuntimeException si ocurre un error al acceder a la base de datos
+     */
     public boolean update(Resena resenaNueva, Resena resenaActual) {
         boolean updated = false;
         if (resenaNueva != null && findByIdLazy(resenaActual.getId())!=null) { //usamos la versión lazy porque solo necesitamos saber si la reseña existe
@@ -84,6 +106,12 @@ public class ResenaDAO implements DAOinterface <Resena>{
         return updated;
     }
 
+    /**
+     * Recupera una reseña con todos sus datos relacionados (usuario y videojuego) según su ID.
+     * @param id el ID de la reseña a buscar
+     * @return la reseña encontrada o null si no existe
+     * @throws RuntimeException si ocurre un error al acceder a la base de datos
+     */
     public Resena findById(int id) { //eager
         Resena resena = null;
         VideojuegoDAO videojuegoDAO = new VideojuegoDAO();
@@ -109,6 +137,12 @@ public class ResenaDAO implements DAOinterface <Resena>{
         return resena;
     }
 
+    /**
+     * Recupera una reseña por su ID sin cargar los datos de usuario ni videojuego. Se usa para comprobaciones.
+     * @param id el ID de la reseña
+     * @return la reseña encontrada sin relaciones o null si no existe
+     * @throws RuntimeException si ocurre un error al acceder a la base de datos
+     */
     public static Resena findByIdLazy(int id) { //lazy
         Resena resena = null;
         try {
@@ -131,6 +165,11 @@ public class ResenaDAO implements DAOinterface <Resena>{
         return resena;
     }
 
+    /**
+     * Obtiene todas las reseñas asociadas a un videojuego específico.
+     * @param videojuego el videojuego del cual obtener las reseñas
+     * @return una lista de reseñas correspondientes al videojuego
+     */
     public List<Resena> findResenasByVideojuego(Videojuego videojuego) {
         List<Resena> resenas = new ArrayList<>();
 
@@ -154,6 +193,12 @@ public class ResenaDAO implements DAOinterface <Resena>{
         return resenas;
     }
 
+    /**
+     * Verifica si un usuario ya ha realizado una reseña sobre un videojuego.
+     * @param usuarioId ID del usuario
+     * @param videojuegoId ID del videojuego
+     * @return true si la reseña existe, false si no
+     */
     public boolean existeResena(int usuarioId, int videojuegoId) {
 
         boolean existe = false;
@@ -173,6 +218,11 @@ public class ResenaDAO implements DAOinterface <Resena>{
         return existe;
     }
 
+    /**
+     * Recupera todas las reseñas realizadas por un usuario específico.
+     * @param id ID del usuario
+     * @return lista de reseñas hechas por el usuario
+     */
     public List<Resena> findByUsuario(int id) {
         List<Resena> resenas = new ArrayList<>();
 

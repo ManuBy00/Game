@@ -24,6 +24,12 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
 
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
 
+    /**
+     * Inserta una nueva noticia en la base de datos.
+     * @param noticia el objeto Noticia a insertar
+     * @return true si la noticia se ha insertado correctamente, false en caso contrario
+     * @throws NoticiaYaExisteException si ya existe una noticia con el mismo título
+     */
     public boolean insert(Noticia noticia) {
         boolean added = false;
         if (findByTitulo(noticia.getTitulo()) != null) {
@@ -54,6 +60,12 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
         return added;
     }
 
+
+    /**
+     * Elimina una noticia de la base de datos por su ID.
+     * @param id el ID de la noticia a eliminar
+     * @return true si la noticia fue eliminada correctamente, false si no se encontró la noticia
+     */
     public boolean delete(int id) {
         boolean deleted = false;
         if (findById(id) != null) {
@@ -69,6 +81,12 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
         return deleted;
     }
 
+    /**
+     * Actualiza una noticia existente en la base de datos.
+     * @param noticiaNueva el objeto Noticia con los datos actualizados
+     * @param noticiaActual el objeto Noticia original que se desea actualizar
+     * @return true si la actualización fue exitosa, false en caso contrario
+     */
     public boolean update(Noticia noticiaNueva, Noticia noticiaActual) {
         boolean result = false;
         if (noticiaNueva != null) {
@@ -91,6 +109,11 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
         return result;
     }
 
+    /**
+     * Obtiene todas las noticias almacenadas en la base de datos.
+     *
+     * @return una lista con todas las noticias
+     */
     public List<Noticia> findAll() {
         List<Noticia> lista = new ArrayList<>();
         try {
@@ -118,6 +141,11 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
         return lista;
     }
 
+    /**
+     * Busca una noticia por su título.
+     * @param titulo el título de la noticia a buscar
+     * @return el objeto Noticia correspondiente si se encuentra, null si no existe
+     */
     public Noticia findByTitulo(String titulo) {
         Noticia noticia = null;
         try {
@@ -144,6 +172,11 @@ public class NoticiaDAO implements DAOinterface<Noticia>{
         return noticia;
     }
 
+    /**
+     * Busca una noticia por su ID.
+     * @param id el ID de la noticia a buscar
+     * @return el objeto Noticia correspondiente si se encuentra, null si no existe
+     */
     public Noticia findById(int id) {
         Noticia noticia = null;
         try {

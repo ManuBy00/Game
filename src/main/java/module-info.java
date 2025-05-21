@@ -5,6 +5,7 @@ module com.example.proyectgame {
     requires java.sql;
     requires java.xml.bind;
     requires jbcrypt;
+    requires jdk.jshell;
 
 
     opens com.example.proyectgame to javafx.fxml;

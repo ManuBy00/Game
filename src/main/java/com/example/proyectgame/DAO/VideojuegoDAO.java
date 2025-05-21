@@ -20,6 +20,14 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
     private final static String SQL_FIND_BY_GENERO = "SELECT * FROM videojuego WHERE genero = ?";
 
 
+    /**
+     * Inserta un nuevo videojuego en la base de datos.
+     * Verifica que no exista previamente uno con el mismo título y que todos los campos requeridos estén completos.
+     * @param videojuego el videojuego a insertar
+     * @return true si se ha insertado correctamente, false en caso contrario
+     * @throws VideojuegoYaExisteException si ya existe un videojuego con el mismo título
+     * @throws DatoNoValido si falta algún campo obligatorio
+     */
     public boolean insert(Videojuego videojuego) {
         boolean added = false;
         if (videojuego != null && findByName(videojuego.getTitulo()) != null) {
@@ -54,6 +62,11 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
         return added;
     }
 
+    /**
+     * Elimina un videojuego de la base de datos por su identificador.
+     * @param id el identificador del videojuego a eliminar
+     * @return true si se eliminó correctamente, false si no existe
+     */
     public boolean delete(int id) {
         boolean deleted = false;
         if (findById(id)!=null) {
@@ -73,6 +86,11 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
         return deleted;
     }
 
+    /**
+     * Busca un videojuego en la base de datos por su título.
+     * @param titulo el título del videojuego a buscar
+     * @return el videojuego encontrado, o null si no existe
+     */
     public Videojuego findByName(String titulo) {
         Videojuego videojuego = null;
         try {
@@ -129,6 +147,11 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
         return updated;
     }
 
+    /**
+     * Busca un videojuego en la base de datos por su identificador.
+     * @param id el identificador del videojuego
+     * @return el videojuego encontrado, o null si no existe
+     */
     public Videojuego findById(int id) {
         Videojuego videojuego = null;
         try {
@@ -153,6 +176,11 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
         return videojuego;
     }
 
+    /**
+     * Recupera todos los videojuegos almacenados en la base de datos.
+     * También carga las reseñas asociadas a cada videojuego.
+     * @return una lista de todos los videojuegos
+     */
     public List<Videojuego> findAll() {
         List<Videojuego> lista = new ArrayList<>();
         try {
@@ -184,6 +212,13 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
         return lista;
     }
 
+    /**
+     * Recupera una lista de videojuegos cuyo género coincide con el indicado. Se usa para el filtro de videojuegos.
+     * Además, para cada videojuego encontrado se cargan sus reseñas asociadas.
+     * @param genero el género por el cual filtrar los videojuegos
+     * @return una lista de videojuegos del género especificado, incluyendo sus reseñas
+     * @throws RuntimeException si ocurre un error al acceder a la base de datos
+     */
     public List<Videojuego> findByGenero(Genero genero) {
         List<Videojuego> lista = new ArrayList<>();
 

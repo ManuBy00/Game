@@ -41,12 +41,22 @@ public class FormVideojuegoController {
 
     private boolean esEdicion = false;
 
+    /**
+     * Metodo de inicialización.
+     * Carga en el ComboBox todos los valores del enum Genero.
+     */
     @FXML
     private void initialize() {
         generoComboBox.getItems().setAll(Genero.values());
 
     }
 
+    /**
+     * Configura el formulario para edición de un videojuego existente.
+     * Se llama antes de lanzar la vista.
+     * Rellena los campos del formulario con los datos del videojuego recibido.
+     * @param videojuego videojuego que se va a editar.
+     */
     public void setVideojuego(Videojuego videojuego) {
         this.videojuegoSeleccionado = videojuego;
         this.esEdicion = true;
@@ -59,6 +69,12 @@ public class FormVideojuegoController {
         desarrolladorField.setText(videojuego.getDesarrolladora());
     }
 
+    /**
+     * Metodo que se ejecuta al pulsar el botón Guardar.
+     * Decide si se llama a añadir un nuevo videojuego o actualizar uno existente según el estado de la variable esEdicion.
+     * Muestra alertas en caso de que el nombre del videojuego ya exista.
+     * @param actionEvent evento disparado por el botón.
+     */
     @FXML
     public void guardarButton(ActionEvent actionEvent) {
         if (esEdicion) {
@@ -76,7 +92,11 @@ public class FormVideojuegoController {
         }
     }
 
-
+    /**
+     * Añade un nuevo videojuego a la base de datos.
+     * Valida que todos los campos del formulario estén rellenados y que una imagen de portada esté seleccionada.
+     * Muestra alertas en caso de campos incompletos o datos no válidos.
+     */
     private void addVideojuego() {
         if (tituloField==null || descripcionArea == null || generoComboBox == null || desarrolladorField == null || imagenSeleccionada==null){
             Utilidades.mostrarAlerta("Campos incompletos", "Debes rellenar todos los campos");
@@ -102,6 +122,10 @@ public class FormVideojuegoController {
         }
     }
 
+    /**
+     * Actualiza un videojuego existente con los datos del formulario.
+     * Muestra alerta si el nombre del videojuego ya existe.
+     */
     public void updateVideojuego(){
         String titulo = tituloField.getText();
         String descripcion = descripcionArea.getText();
@@ -126,12 +150,16 @@ public class FormVideojuegoController {
         }
     }
 
+    /**
+     * Permite al usuario seleccionar una imagen de su sistema.
+     * Abre un diálogo para escoger archivos de imagen (.png, .jpg, .jpeg).
+     * Copia el archivo seleccionado a la carpeta de recursos del proyecto para portadas.
+     * @param actionEvent el evento se ejecuta al hacer clic en el botón de seleccionar imagen.
+     */
     public void seleccionarImagen(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar imagen de portada");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
-        );
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")); //formatos de imagen aceptados
         File archivo = fileChooser.showOpenDialog(null);
 
         if (archivo != null) {
@@ -142,11 +170,7 @@ public class FormVideojuegoController {
             File destino = new File("src/main/resources/com/example/proyectgame/Portadas/" + archivo.getName());
 
             try {
-                java.nio.file.Files.copy(
-                        archivo.toPath(),
-                        destino.toPath(),
-                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
-                );
+                java.nio.file.Files.copy(archivo.toPath(), destino.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }

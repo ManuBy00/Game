@@ -38,12 +38,20 @@ public class DetalleVideojuegoController {
     @FXML private Slider sliderPuntuacion;
     private Videojuego videojuego;
 
-
+    /**
+     * Establece el videojuego actual y muestra sus detalles en la vista.
+     * @param videojuego el videojuego cuyos detalles se van a mostrar.
+     * Este metodo se usa antes de lanzar la escena.
+     */
     public void setVideojuego(Videojuego videojuego) {
         this.videojuego = videojuego;
         mostrarDetalles();
     }
 
+    /**
+     * Muestra todos los detalles del videojuego en la interfaz:
+     * También obtiene las reseñas desde la base de datos usando ResenaDAO.
+     */
     private void mostrarDetalles() {
         if (videojuego == null) return;
 
@@ -84,8 +92,15 @@ public class DetalleVideojuegoController {
         }
     }
 
+    /**
+     * Añade una nueva reseña al videojuego actual.
+     * La guarda usando el ResenaDAO.
+     * Añade la reseña a la lista del videojuego si se inserta correctamente.
+     * Recarga los detalles para mostrar la nueva reseña.
+     * Muestra una alerta si ya existe una reseña del usuario para este juego.
+     * @param actionEvent el evento del botón pulsado
+     */
     public void addResena(ActionEvent actionEvent) {
-
         String comentarioResena = this.comentarioResena.getText();
         int puntuacion = (int) sliderPuntuacion.getValue();
         Videojuego videojuego = this.videojuego;
@@ -105,6 +120,10 @@ public class DetalleVideojuegoController {
         mostrarDetalles(); //para recargar
     }
 
+    /**
+     * Vuelve a la vista anterior (VideojuegosView.fxml).
+     * @param actionEvent el evento del botón "Volver"
+     */
     public void volverVentanaAnterior(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/proyectgame/VideojuegosView.fxml"));

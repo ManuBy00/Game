@@ -3,13 +3,17 @@ package com.example.proyectgame.Controller;
 import com.example.proyectgame.DAO.GuiaDAO;
 import com.example.proyectgame.DAO.NoticiaDAO;
 import com.example.proyectgame.DAO.VideojuegoDAO;
+import com.example.proyectgame.Exceptions.NoticiaYaExisteException;
 import com.example.proyectgame.Model.*;
 import com.example.proyectgame.Utilities.Sesion;
+import com.example.proyectgame.Utilities.Utilidades;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import jdk.jshell.execution.Util;
+
 import java.time.LocalDate;
 
 
@@ -29,9 +33,17 @@ public class ContenidoFormController {
 
     private Contenido contenidoExistente;
 
+    /**
+     * Inicializa el formulario al cargar la vista.
+     * Configura los componentes visuales de la vista
+     * y establece el comportamiento de los campos extra, que cambian según el contenido sea una noticia o una guía
+     * También carga los videojuegos en el ComboBox si se va a crear una guía.
+     */
     @FXML
     public void initialize() {
-        tipoComboBox.getItems().addAll("Noticia", "Guia");
+        if (tipoComboBox.getItems().isEmpty()) {
+            tipoComboBox.getItems().addAll("Noticia", "Guia");
+        }
         tipoComboBox.setOnAction(e -> actualizarCampoExtra());
         campoExtraField.setVisible(false);
         campoExtraComboBox.setVisible(false);
@@ -48,6 +60,11 @@ public class ContenidoFormController {
         });
     }
 
+    /**
+     * Carga un contenido existente (Noticia o Guía) en el formulario para ser actualizado.
+     * y ajusta la visibilidad de los campos adicionales según el tipo.
+     * @param contenido el contenido que se desea editar
+     */
     public void setContenido(Contenido contenido) {
         this.contenidoExistente = contenido;
 
@@ -66,6 +83,11 @@ public class ContenidoFormController {
         actualizarCampoExtra();
     }
 
+    /**
+     * Actualiza los campos del formulario que dependen
+     * del tipo de contenido seleccionado en el ComboBox (Noticia o Guía).
+     * Muestra el subtítulo si es una Noticia o el videojuego si es una Guía.
+     */
     private void actualizarCampoExtra() {
         String tipo = tipoComboBox.getValue();
 
@@ -84,6 +106,12 @@ public class ContenidoFormController {
         }
     }
 
+    /**
+     * Guarda el contenido introducido en el formulario.
+     * Si se trata de un contenido nuevo, lo inserta en la base de datos.
+     * Si ya existe, actualiza sus datos.
+     * @param event el evento que activa la acción (click en el botón guardar)
+     */
     @FXML
     private void guardarContenido(ActionEvent event) {
         String titulo = tituloField.getText();
@@ -92,33 +120,41 @@ public class ContenidoFormController {
         String tipo = tipoComboBox.getValue();
 
         if (titulo.isEmpty() || cuerpo.isEmpty() || fecha == null || tipo == null) {
-            mostrarAlerta("Todos los campos son obligatorios.");
+            Utilidades.mostrarAlerta("Atención","Todos los campos son obligatorios.");
             return;
         }
 
-
         Usuario autor = Sesion.getInstancia().getUsuarioIniciado();
-
 
         if (contenidoExistente == null) {
             // Crear nuevo
             if ("Noticia".equals(tipo)) {
                 String subtitulo = campoExtraField.getText();
                 if (subtitulo.isEmpty()) {
-                    mostrarAlerta("El subtítulo no puede estar vacío.");
+                    Utilidades.mostrarAlerta("Atención", "El subtítulo no puede estar vacío.");
                     return;
                 }
                 Noticia noticia = new Noticia(titulo, fecha, cuerpo, autor, subtitulo);
-                noticiaDAO.insert(noticia);
+                try{
+                    noticiaDAO.insert(noticia);
+                }catch (NoticiaYaExisteException n){
+                    Utilidades.mostrarAlerta("Error", n.getMessage());
+                }
+
             } else if ("Guia".equals(tipo)) {
                 Videojuego videojuego = campoExtraComboBox.getValue();
                 if (videojuego == null) {
-                    mostrarAlerta("Debes seleccionar un videojuego.");
+                    Utilidades.mostrarAlerta("Atención","Debes seleccionar un videojuego.");
                     return;
                 }
                 Guia guia = new Guia(titulo, fecha, autor, cuerpo, videojuego);
 
-                guiaDAO.insert(guia);
+                try {
+                    guiaDAO.insert(guia);
+                }catch (NoticiaYaExisteException n){
+                    Utilidades.mostrarAlerta("Error", n.getMessage());
+                }
+
             }
         } else {
             // Actualizar existente
@@ -130,7 +166,7 @@ public class ContenidoFormController {
                 Noticia noticiaActual = (Noticia) contenidoExistente;
                 String subtitulo = campoExtraField.getText();
                 if (subtitulo.isEmpty()) {
-                    mostrarAlerta("El subtítulo no puede estar vacío.");
+                    Utilidades.mostrarAlerta("Atención","El subtítulo no puede estar vacío.");
                     return;
                 }
                 Noticia noticiaNueva = new Noticia(titulo, fecha, cuerpo, autor, subtitulo);
@@ -139,7 +175,7 @@ public class ContenidoFormController {
                 Guia guiaActual = (Guia) contenidoExistente;
                 Videojuego videojuego = campoExtraComboBox.getValue();
                 if (videojuego == null) {
-                    mostrarAlerta("Debes seleccionar un videojuego.");
+                    Utilidades.mostrarAlerta("Atención","Debes seleccionar un videojuego.");
                     return;
                 }
                 Guia guiaNueva = new Guia(titulo, fecha, autor, cuerpo, videojuego);
@@ -150,17 +186,13 @@ public class ContenidoFormController {
         cerrarVentana();
     }
 
+    /**
+     * Cierra la ventana actual del formulario.
+     * Se llama tras guardar o cancelar la edición del contenido.
+     */
     private void cerrarVentana() {
         Stage stage = (Stage) tituloField.getScene().getWindow();
         stage.close();
-    }
-
-    private void mostrarAlerta(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Formulario incompleto");
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
     }
 }
 

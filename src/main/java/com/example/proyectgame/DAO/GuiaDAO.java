@@ -1,6 +1,7 @@
 package com.example.proyectgame.DAO;
 
 import com.example.proyectgame.DataBase.ConnectionBD;
+import com.example.proyectgame.Exceptions.NoticiaYaExisteException;
 import com.example.proyectgame.Model.Guia;
 import com.example.proyectgame.Model.Usuario;
 import com.example.proyectgame.Model.Videojuego;
@@ -16,6 +17,8 @@ public class GuiaDAO implements DAOinterface<Guia>{
     private static final String SQL_DELETE_BY_ID = "DELETE FROM guia WHERE id = ?";
     private static final String SQL_FIND_ALL = "SELECT * FROM guia";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM guia WHERE id = ?";
+    private static final String SQL_FIND_BY_TITULO = "SELECT * FROM guia WHERE titulo = ?";
+
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
     private final VideojuegoDAO videojuegoDAO = new VideojuegoDAO();
@@ -27,6 +30,9 @@ public class GuiaDAO implements DAOinterface<Guia>{
      */
     public boolean insert(Guia guia) {
         boolean added = false;
+        if (findByTitulo(guia.getTitulo()) != null) {
+            throw new NoticiaYaExisteException("Ya existe una guía con ese título.");
+        }
         try {
             Connection con = ConnectionBD.getConnection();
             PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -155,6 +161,39 @@ public class GuiaDAO implements DAOinterface<Guia>{
                 guia.setFechaPublicacion(rs.getDate("fechaPublicacion").toLocalDate());
                 guia.setCuerpo(rs.getString("cuerpo"));
 
+
+                Usuario autor = usuarioDAO.findById(rs.getInt("autorId"));
+                guia.setAutor(autor);
+
+                Videojuego videojuego = videojuegoDAO.findById(rs.getInt("videojuegoId"));
+                guia.setVideojuego(videojuego);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return guia;
+    }
+
+    /**
+     * Busca una guía por su título.
+     *
+     * @param titulo el título de la guía a buscar
+     * @return el objeto Guia correspondiente si se encuentra, null si no existe
+     */
+    public Guia findByTitulo(String titulo) {
+        Guia guia = null;
+        try {
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_FIND_BY_TITULO);
+            ps.setString(1, titulo);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                guia = new Guia();
+                guia.setId(rs.getInt("id"));
+                guia.setTitulo(rs.getString("titulo"));
+                guia.setFechaPublicacion(rs.getDate("fechaPublicacion").toLocalDate());
+                guia.setCuerpo(rs.getString("cuerpo"));
 
                 Usuario autor = usuarioDAO.findById(rs.getInt("autorId"));
                 guia.setAutor(autor);
