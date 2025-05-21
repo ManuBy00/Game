@@ -5,6 +5,7 @@ import com.example.proyectgame.Model.Genero;
 import com.example.proyectgame.Model.RolUsuario;
 import com.example.proyectgame.Model.Usuario;
 import com.example.proyectgame.Model.Videojuego;
+import com.example.proyectgame.Utilities.Utilidades;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -218,7 +219,7 @@ public class VidejuegosViewController {
             gridPaneVideojuegos.getChildren().clear(); //limpiar grid
             cargarVideojuegos();
         } else {
-            System.out.println("No hay ningún videojuego seleccionado.");
+            Utilidades.mostrarAlerta("Selección", "No hay ningún videojuego seleccionado");
         }
     }
 

@@ -136,8 +136,7 @@ public class ResenaDAO implements DAOinterface <Resena>{
         List<Resena> resenas = new ArrayList<>();
 
         try (Connection conn = ConnectionBD.getConnection()) {
-            String sql = SQL_FIND_BY_VIDEOJUEGO;
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = conn.prepareStatement(SQL_FIND_BY_VIDEOJUEGO);
             stmt.setInt(1, videojuego.getId());
 
             ResultSet rs = stmt.executeQuery();
@@ -157,18 +156,14 @@ public class ResenaDAO implements DAOinterface <Resena>{
     }
 
     public boolean existeResena(int usuarioId, int videojuegoId) {
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        boolean existe = false;
 
+        boolean existe = false;
         try {
-            con = ConnectionBD.getConnection();
-            String sql = SQL_FIND_RESENA_VIDEOJUEGO_USUARIO;
-            ps = con.prepareStatement(sql);
+            Connection con = ConnectionBD.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_FIND_RESENA_VIDEOJUEGO_USUARIO);
             ps.setInt(1, usuarioId);
             ps.setInt(2, videojuegoId);
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 0) {
                 existe = true;
@@ -184,8 +179,7 @@ public class ResenaDAO implements DAOinterface <Resena>{
 
         try {
             Connection conn = ConnectionBD.getConnection();
-            String sql = SQL_FIND_BY_USUARIO;
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = conn.prepareStatement(SQL_FIND_BY_USUARIO);
             stmt.setInt(1, id); // usamos el ID del objeto Usuario
             ResultSet rs = stmt.executeQuery();
 

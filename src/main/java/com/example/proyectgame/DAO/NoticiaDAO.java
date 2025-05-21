@@ -4,9 +4,7 @@ import com.example.proyectgame.DataBase.ConnectionBD;
 import com.example.proyectgame.Exceptions.NoticiaYaExisteException;
 import com.example.proyectgame.Model.Noticia;
 import com.example.proyectgame.Model.Usuario;
-
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,8 +4,7 @@ import com.example.proyectgame.DataBase.ConnectionBD;
 import com.example.proyectgame.Exceptions.UsuarioExiste;
 import com.example.proyectgame.Model.RolUsuario;
 import com.example.proyectgame.Model.Usuario;
-import com.example.proyectgame.Utilities.Sesion;
-import com.example.proyectgame.Utilities.Utilidades;
+
 
 import java.sql.*;
 

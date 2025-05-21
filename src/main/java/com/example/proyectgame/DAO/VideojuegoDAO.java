@@ -205,7 +205,6 @@ public class VideojuegoDAO implements DAOinterface<Videojuego> {
                 lista.add(videojuego);
             }
 
-            // Añadir reseñas si hace falta
             ResenaDAO resenaDAO = new ResenaDAO();
             for (Videojuego v : lista) {
                 v.setResenaList(resenaDAO.findResenasByVideojuego(v));
